@@ -1,0 +1,204 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Weierstrass' Approximation Theorem},
+  pdfauthor={Kexing Ying},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Blue,
+  urlcolor=red,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin = 1.5in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{amsthm, mathtools}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}[theorem]
+\newcommand{\prob}{\text{Pr}}
+\newcommand{\expect}{\mathbf{E}}
+
+\title{Weierstrass' Approximation Theorem}
+\author{Kexing Ying}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+We will provide a proof for Weierstrass' approximation theorem using the
+law of large numbers.
+\end{abstract}
+
+The \emph{Weierstrass' approximation theorem} is a powerful theorem that
+showed that algebraic polynomials are dense in set of continuous
+real-valued functions. We will prove this fact here.
+
+We shall first consider the following lemmas.
+
+\begin{lemma}\label{l}
+Let $X_1, X_2, \cdots , X_i, \cdots , X_n$ be a sequence of independently and identically distributed random 
+variables following the Bernoulli distribution with parameter $x$ and let $f : [0, 1] \to \mathbb{R}$ be a 
+continuous function. Then
+$$ \mathbf{E}\left[f \left(\frac{S_n}{n} \right)\right] = B_n(x) $$
+where $S_n := \sum_{i = 1}^n X_i$, and 
+$$B_n(x) := \sum_{k = 0}^n f \left(\frac{k}{n}\right) \binom{n}{k} x^k (1 - x)^{n - k}.$$
+\end{lemma}
+\begin{proof}
+As $S_n$ is defined to be the sum of $n$ i.i.d Bernoulli random variables, it follows a binomial distribution 
+with parameter $n$ and $x$ (prove it!). Thus, $S_n$ has a probability mass function,
+$$p_{S_n}(k) = \text{Pr}(S_n = k) = \binom{n}{k} x^k(1 - x)^{n-k}. $$
+
+Then, by the \textit{law of the unconscious statistician} (cite this), we have 
+$$\mathbf{E}\left[f \left(\frac{S_n}{n} \right)\right] = \sum_{k \in \text{supp}\left(\frac{S_n}{n}\right)} f(k) \text{Pr}\left(\frac{S_n}{n} = k\right),$$
+where $\text{supp}\left(\frac{S_n}{n}\right)$ denotes the support of $\frac{S_n}{n}$.
+
+Now as, $S_n$ is the sum of $n$ Bernoulli random variables, $S_n$ can take valued from $1, 2, \cdots, n$, and 
+thus $\text{supp}\left(\frac{S_n}{n}\right) = \{\frac{1}{n}, \frac{2}{n}, \cdots, 1 \}$.
+
+Then, 
+\begin{align*}
+\mathbf{E}\left[f \left(\frac{S_n}{n} \right)\right] & = \sum_{k \in \text{supp}\left(\frac{S_n}{n}\right)} f(k) \text{Pr}\left(\frac{S_n}{n} = k\right) \\
+& = \sum_{k \in \text{supp}\left(\frac{S_n}{n}\right)} f(k) \text{Pr}\left(S_n = nk\right) \\
+& = \sum_{k \in \{\frac{1}{n}, \frac{2}{n}, \cdots, 1 \}} f(k) \binom{n}{nk} x^{nk} (1 - x)^{n-nk}\\
+& = \sum_{i = 0}^n f\left(\frac{i}{n}\right) \binom{n}{i} x^i (1 - x)^{n - i} = B_n(x)
+\end{align*}
+as required.
+
+\end{proof}
+
+\begin{lemma}\label{a}
+Let $f : [0, 1] \to \mathbb{R}$ be a continuous function. Then for all $\epsilon > 0$, there exists some $\delta >0$ 
+such that 
+$$\mathbf{E}\left[ \mathbf{1}_{(A_n)^c} \left| f(x) - f \left(\frac{S_n}{n}\right) \right| \right] < \epsilon$$
+where $\mathbf{1}_{(A_n)^c}$ is the indicator function for $(A_n)^c$ and 
+$$ A_n(\delta) = \left\{\omega : \left| \frac{S_n(\omega)}{n} - x \right| \ge \delta \right\}.$$
+
+\end{lemma}
+\begin{proof}
+Let us fix $\epsilon > 0$. As $f$ is continuous on a compact interval $[0, 1]$, $f$ is uniformally continuous 
+(cite this), thus, there exists some $\delta > 0$ such that, for all $x, y \in [0, 1]$, if 
+$\left| x - y \right| < \delta$, then $\left| f(x) - f(y) \right| < \epsilon$.
+
+Then we see, that, if $\omega \in A_n(\delta)^c$, we have $\mathbf{1}_{A_n(\delta)^c} = 1$ and as 
+$$\omega \in A_n(\delta)^c = \left\{\omega : \neg \left| \frac{S_n(\omega)}{n} - x \right| \ge \delta \right\} = 
+\left\{\omega : \left| \frac{S_n(\omega)}{n} - x \right| < \delta \right\},$$ 
+i.e. $\left| x - \frac{S_n}{n} \right| < \delta$, 
+and thus, by the construction of $\delta$, $\left| f(x) - f\left(\frac{S_n}{n}\right) \right| < \epsilon$ and hence,
+$$\mathbf{1}_{A_n(\delta)^c}\left| x - \frac{S_n}{n} \right| = \left| x - \frac{S_n}{n} \right| < \epsilon.$$
+
+On the other hand, if $\omega \not\in A_n(\delta)^c$, we have $\mathbf{1}_{A_n(\delta)^c} = 0$, so
+$$\mathbf{1}_{A_n(\delta)^c}\left| x - \frac{S_n}{n} \right| = 0.$$
+
+\newpage
+Now, as the events of $\omega \in A_n(\delta)^c$ and the event $\omega \not\in A_n(\delta)^c$ 
+partitions the sample space by the \textit{law of excluded middle} (cite this), by the \textit{total 
+law of expectation}, we have,
+\begin{align*}
+\mathbf{E}\left[ \mathbf{1}_{(A_n)^c} \left| f(x) - f \left(\frac{S_n}{n}\right) \right| \right] & = \mathbf{E}\left[ \left(\mathbf{1}_{(A_n)^c} \left| f(x) - f \left(\frac{S_n}{n}\right) \right| \right) \mid \omega \in A_n(\delta)^c \right] \text{Pr}(\omega \in A_n(\delta)^c) \\
+& + \mathbf{E}\left[ \left( \mathbf{1}_{(A_n)^c} \left| f(x) - f \left(\frac{S_n}{n} \right) \right| \right) \mid \omega \not\in A_n(\delta)^c \right] \text{Pr}(\omega \not\in A_n(\delta)^c) \\
+& = \mathbf{E}\left[ \left(\mathbf{1}_{(A_n)^c} \left| f(x) - f \left(\frac{S_n}{n}\right) \right| \right) \mid \omega \in A_n(\delta)^c \right] \text{Pr}(\omega \in A_n(\delta)^c)\\
+& < \epsilon \text{Pr}(\omega \in A_n(\delta)^c) \le \epsilon
+\end{align*}
+as required.
+\end{proof}
+
+Now armed with the above two lemmas, we can finally prove the
+\textit{Weierstrass' approximation 
+theorem}.
+
+\begin{theorem}[Weierstrass' approximation theorem]
+Let $f : [0, 1] \to \mathbb{R}$ be a continuous function. Then for all $\epsilon > 0$, there exists a polynomial 
+$P_n$ such that 
+$$\sup_{x \in [0, 1]} \left| f(x) - P_n(x) \right| < \epsilon. $$
+\end{theorem}
+
+\begin{proof}
+Fix $\epsilon > 0$, then by lemma~\ref{a}, there is some $\delta > 0$ such that 
+\begin{align*}
+ \frac{1}{2}\epsilon & > \mathbf{E}\left[ \mathbf{1}_{A_n(\delta)^c} \left| f(x) - f \left(\frac{S_n}{n}\right) \right| \right] \\
+ &= \mathbf{E}\left[ \left(\mathbf{1}_{(A_n)^c} \left| f(x) - f \left(\frac{S_n}{n}\right) \right| \right) \mid A_n(\delta)^c \right] \text{Pr}(A_n(\delta)^c), 
+\end{align*}
+where $A_n(\delta)$ is defined the same way as lemma~\ref{a}.
+
+By considering the \textit{weak law of large numbers}, we have $P(A_n(\delta)) \to 0$ as $n \to \infty$. So there exists 
+some $N \in \mathbb{N}$, such that for all $n \ge N$, $\left| P(A_n(\delta)) \right| < \frac{1}{2}$.
+
+Now, consider by triangle inequality, for any discrete random variable $Y$, 
+$$\mathbf{E}(\left| Y \right|) = \sum \left| y \right| \text{Pr}(Y = y) \ge \left| \sum y \text{Pr}(Y = y) \right| = \left| \mathbf{E}(Y) \right|,$$
+where the second equality is due to the law of the unconscious statistician.
+
+Thus, with this, we can establish the following inequality,
+\begin{align*}
+& \mathbf{E}\left[ \left(\mathbf{1}_{(A_N)^c} \left| f(x) - f \left(\frac{S_N}{N}\right) \right| \right) \mid (A_N)^c \right] \text{Pr}((A_N)^c) \\
+& = \mathbf{E}\left[ \left| f(x) - f \left(\frac{S_N}{N}\right) \right|\right] \text{Pr}((A_N)^c) \\
+& \ge \left| \mathbf{E}\left[f(x) - f \left(\frac{S_N}{N}\right) \right] \right| \text{Pr}((A_N)^c) \\
+& = \left| f(x) - \mathbf{E}\left[f \left(\frac{S_N}{N}\right) \right] \right| \text{Pr}((A_N)^c).
+\end{align*}
+However, by lemma~\ref{l}, we have $\mathbf{E}\left[f \left(\frac{S_N}{N}\right) \right] = B_N$, thus, 
+\begin{align*}
+\left| f(x) - \mathbf{E}\left[f \left(\frac{S_N}{N}\right) \right] \right| \text{Pr}((A_N)^c) & = \left| f(x) - B_N(x) \right| \text{Pr}((A_N)^c)\\
+& = \left| f(x) - B_N(x) \right| (1 - \text{Pr}(A_N)). \\
+\end{align*}
+Now, as we have choosen $N$, such that $\text{Pr}(A_N) < \frac{1}{2}$, $1 - \text{Pr}(A_N) > \frac{1}{2}$, so 
+$$ \left| f(x) - B_N(x) \right| (1 - \text{Pr}(A_N)) > \frac{1}{2}\left| f(x) - B_N(x) \right|,$$
+and hence, 
+$$
+\frac{1}{2} \epsilon > \frac{1}{2}\left| f(x) - B_N(x) \right| 
+\implies \epsilon > \left| f(x) - B_N(x) \right|.
+$$
+As $B_N$ is a polynomial, we have found polynomial that is at most $\epsilon$ distance away from $f$, as required.
+\end{proof}
+
+\end{document}

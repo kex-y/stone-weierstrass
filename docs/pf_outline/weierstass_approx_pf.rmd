@@ -1,0 +1,132 @@
+---
+title: "Weierstrass' Approximation Theorem"
+author: Kexing Ying
+output: pdf_document
+geometry: margin = 1.5in
+urlcolor: red
+header-includes:
+  - \usepackage{amsthm, mathtools}
+  - \newtheorem{theorem}{Theorem}
+  - \newtheorem{lemma}{Lemma}[theorem]
+  - \newcommand{\prob}{\text{Pr}}
+  - \newcommand{\expect}{\mathbf{E}}
+abstract: "We will provide a proof for Weierstrass' approximation theorem using the law of large numbers."
+---
+
+The *Weierstrass' approximation theorem* is a powerful theorem that showed that algebraic polynomials are 
+dense in set of continuous real-valued functions. We will prove this fact here.
+
+We shall first consider the following lemmas.
+
+\begin{lemma}\label{l}
+Let $X_1, X_2, \cdots , X_i, \cdots , X_n$ be a sequence of independently and identically distributed random 
+variables following the Bernoulli distribution with parameter $x$ and let $f : [0, 1] \to \mathbb{R}$ be a 
+continuous function. Then
+$$ \expect \left[f \left(\frac{S_n}{n} \right)\right] = B_n(x) $$
+where $S_n := \sum_{i = 1}^n X_i$, and 
+$$B_n(x) := \sum_{k = 0}^n f \left(\frac{k}{n}\right) \binom{n}{k} x^k (1 - x)^{n - k}.$$
+\end{lemma}
+\begin{proof}
+As $S_n$ is defined to be the sum of $n$ i.i.d Bernoulli random variables, it follows a binomial distribution 
+with parameter $n$ and $x$ (prove it!). Thus, $S_n$ has a probability mass function,
+$$p_{S_n}(k) = \prob (S_n = k) = \binom{n}{k} x^k(1 - x)^{n-k}. $$
+
+Then, by the \textit{law of the unconscious statistician} (cite this), we have 
+$$\expect \left[f \left(\frac{S_n}{n} \right)\right] = \sum_{k \in \text{supp}\left(\frac{S_n}{n}\right)} f(k) \prob \left(\frac{S_n}{n} = k\right),$$
+where $\text{supp}\left(\frac{S_n}{n}\right)$ denotes the support of $\frac{S_n}{n}$.
+
+Now as, $S_n$ is the sum of $n$ Bernoulli random variables, $S_n$ can take valued from $1, 2, \cdots, n$, and 
+thus $\text{supp}\left(\frac{S_n}{n}\right) = \{\frac{1}{n}, \frac{2}{n}, \cdots, 1 \}$.
+
+Then, 
+\begin{align*}
+\expect \left[f \left(\frac{S_n}{n} \right)\right] & = \sum_{k \in \text{supp}\left(\frac{S_n}{n}\right)} f(k) \prob \left(\frac{S_n}{n} = k\right) \\
+& = \sum_{k \in \text{supp}\left(\frac{S_n}{n}\right)} f(k) \prob \left(S_n = nk\right) \\
+& = \sum_{k \in \{\frac{1}{n}, \frac{2}{n}, \cdots, 1 \}} f(k) \binom{n}{nk} x^{nk} (1 - x)^{n-nk}\\
+& = \sum_{i = 0}^n f\left(\frac{i}{n}\right) \binom{n}{i} x^i (1 - x)^{n - i} = B_n(x)
+\end{align*}
+as required.
+
+\end{proof}
+
+\begin{lemma}\label{a}
+Let $f : [0, 1] \to \mathbb{R}$ be a continuous function. Then for all $\epsilon > 0$, there exists some $\delta >0$ 
+such that 
+$$\expect \left[ \mathbf{1}_{(A_n)^c} \left| f(x) - f \left(\frac{S_n}{n}\right) \right| \right] < \epsilon$$
+where $\mathbf{1}_{(A_n)^c}$ is the indicator function for $(A_n)^c$ and 
+$$ A_n(\delta) = \left\{\omega : \left| \frac{S_n(\omega)}{n} - x \right| \ge \delta \right\}.$$
+
+\end{lemma}
+\begin{proof}
+Let us fix $\epsilon > 0$. As $f$ is continuous on a compact interval $[0, 1]$, $f$ is uniformally continuous 
+(cite this), thus, there exists some $\delta > 0$ such that, for all $x, y \in [0, 1]$, if 
+$\left| x - y \right| < \delta$, then $\left| f(x) - f(y) \right| < \epsilon$.
+
+Then we see, that, if $\omega \in A_n(\delta)^c$, we have $\mathbf{1}_{A_n(\delta)^c} = 1$ and as 
+$$\omega \in A_n(\delta)^c = \left\{\omega : \neg \left| \frac{S_n(\omega)}{n} - x \right| \ge \delta \right\} = 
+\left\{\omega : \left| \frac{S_n(\omega)}{n} - x \right| < \delta \right\},$$ 
+i.e. $\left| x - \frac{S_n}{n} \right| < \delta$, 
+and thus, by the construction of $\delta$, $\left| f(x) - f\left(\frac{S_n}{n}\right) \right| < \epsilon$ and hence,
+$$\mathbf{1}_{A_n(\delta)^c}\left| x - \frac{S_n}{n} \right| = \left| x - \frac{S_n}{n} \right| < \epsilon.$$
+
+On the other hand, if $\omega \not\in A_n(\delta)^c$, we have $\mathbf{1}_{A_n(\delta)^c} = 0$, so
+$$\mathbf{1}_{A_n(\delta)^c}\left| x - \frac{S_n}{n} \right| = 0.$$
+
+\newpage
+Now, as the events of $\omega \in A_n(\delta)^c$ and the event $\omega \not\in A_n(\delta)^c$ 
+partitions the sample space by the \textit{law of excluded middle} (cite this), by the \textit{total 
+law of expectation}, we have,
+\begin{align*}
+\expect \left[ \mathbf{1}_{(A_n)^c} \left| f(x) - f \left(\frac{S_n}{n}\right) \right| \right] & = \expect \left[ \left(\mathbf{1}_{(A_n)^c} \left| f(x) - f \left(\frac{S_n}{n}\right) \right| \right) \mid \omega \in A_n(\delta)^c \right] \prob(\omega \in A_n(\delta)^c) \\
+& + \expect \left[ \left( \mathbf{1}_{(A_n)^c} \left| f(x) - f \left(\frac{S_n}{n} \right) \right| \right) \mid \omega \not\in A_n(\delta)^c \right] \prob(\omega \not\in A_n(\delta)^c) \\
+& = \expect \left[ \left(\mathbf{1}_{(A_n)^c} \left| f(x) - f \left(\frac{S_n}{n}\right) \right| \right) \mid \omega \in A_n(\delta)^c \right] \prob(\omega \in A_n(\delta)^c)\\
+& < \epsilon \prob (\omega \in A_n(\delta)^c) \le \epsilon
+\end{align*}
+as required.
+\end{proof}
+
+Now armed with the above two lemmas, we can finally prove the \textit{Weierstrass' approximation 
+theorem}.
+
+\begin{theorem}[Weierstrass' approximation theorem]
+Let $f : [0, 1] \to \mathbb{R}$ be a continuous function. Then for all $\epsilon > 0$, there exists a polynomial 
+$P_n$ such that 
+$$\sup_{x \in [0, 1]} \left| f(x) - P_n(x) \right| < \epsilon. $$
+\end{theorem}
+
+\begin{proof}
+Fix $\epsilon > 0$, then by lemma~\ref{a}, there is some $\delta > 0$ such that 
+\begin{align*}
+ \frac{1}{2}\epsilon & > \expect \left[ \mathbf{1}_{A_n(\delta)^c} \left| f(x) - f \left(\frac{S_n}{n}\right) \right| \right] \\
+ &= \expect \left[ \left(\mathbf{1}_{(A_n)^c} \left| f(x) - f \left(\frac{S_n}{n}\right) \right| \right) \mid A_n(\delta)^c \right] \prob(A_n(\delta)^c), 
+\end{align*}
+where $A_n(\delta)$ is defined the same way as lemma~\ref{a}.
+
+By considering the \textit{weak law of large numbers}, we have $P(A_n(\delta)) \to 0$ as $n \to \infty$. So there exists 
+some $N \in \mathbb{N}$, such that for all $n \ge N$, $\left| P(A_n(\delta)) \right| < \frac{1}{2}$.
+
+Now, consider by triangle inequality, for any discrete random variable $Y$, 
+$$\expect (\left| Y \right|) = \sum \left| y \right| \prob(Y = y) \ge \left| \sum y \prob(Y = y) \right| = \left| \expect(Y) \right|,$$
+where the second equality is due to the law of the unconscious statistician.
+
+Thus, with this, we can establish the following inequality,
+\begin{align*}
+& \expect \left[ \left(\mathbf{1}_{(A_N)^c} \left| f(x) - f \left(\frac{S_N}{N}\right) \right| \right) \mid (A_N)^c \right] \prob((A_N)^c) \\
+& = \expect \left[ \left| f(x) - f \left(\frac{S_N}{N}\right) \right|\right] \prob((A_N)^c) \\
+& \ge \left| \expect \left[f(x) - f \left(\frac{S_N}{N}\right) \right] \right| \prob((A_N)^c) \\
+& = \left| f(x) - \expect \left[f \left(\frac{S_N}{N}\right) \right] \right| \prob((A_N)^c).
+\end{align*}
+However, by lemma~\ref{l}, we have $\expect \left[f \left(\frac{S_N}{N}\right) \right] = B_N$, thus, 
+\begin{align*}
+\left| f(x) - \expect \left[f \left(\frac{S_N}{N}\right) \right] \right| \prob((A_N)^c) & = \left| f(x) - B_N(x) \right| \prob((A_N)^c)\\
+& = \left| f(x) - B_N(x) \right| (1 - \prob(A_N)). \\
+\end{align*}
+Now, as we have choosen $N$, such that $\prob(A_N) < \frac{1}{2}$, $1 - \prob(A_N) > \frac{1}{2}$, so 
+$$ \left| f(x) - B_N(x) \right| (1 - \prob(A_N)) > \frac{1}{2}\left| f(x) - B_N(x) \right|,$$
+and hence, 
+$$
+\frac{1}{2} \epsilon > \frac{1}{2}\left| f(x) - B_N(x) \right| 
+\implies \epsilon > \left| f(x) - B_N(x) \right|.
+$$
+As $B_N$ is a polynomial, we have found polynomial that is at most $\epsilon$ distance away from $f$, as required.
+\end{proof}
