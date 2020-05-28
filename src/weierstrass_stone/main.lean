@@ -4,7 +4,7 @@ import weierstrass_stone.definitions
 noncomputable theory
 open set 
 
-variables {X : Type*} [topological_space X] [compact_space X]
+variables {X : Type*} [metric_space X] [compact_space X]
 
 /- We have some API regarding bdd continuous functions in mathlib! -/
 #check bounded_continuous_function X ℝ
@@ -123,6 +123,10 @@ Now, as g_xᵢ(z) > f(z) - ε, for all i, so is h(z) > f(z) - ε and hence
 there is a function in closure₀ M₀ thats arbitarily close to f. 
 -/
 
+#check finset.sup
+
+instance : semilattice_sup_bot (bounded_continuous_function X ℝ) := sorry
+
 example {M₀ : set (bounded_continuous_function X ℝ)}
 {f : bounded_continuous_function X ℝ}
 (h : ∀ ε > 0, ∀ x y : X, ∃ (g : bounded_continuous_function X ℝ) 
@@ -134,7 +138,11 @@ begin
   let S : X → set X := λ y, {z | f z - g y z < ε},
   have hc := _inst_2.1, 
   cases compact.elim_finite_subcover hc S _ _ with I hI,
-    { sorry },
+    { let h := I.sup g,
+      refine ⟨h, λ z, _⟩,
+      suffices : ∀ i, g i z < f z + ε,
+        sorry,
+      sorry },
     { sorry },
     intros y hy, exact mem_Union.2 ⟨y, (abs_lt.1 $ hg₁ y).2⟩,
 end
