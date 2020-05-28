@@ -1,8 +1,8 @@
 [package]
 name = "clt"
 version = "0.1"
-lean_version = "leanprover-community/lean:3.13.2"
+lean_version = "leanprover-community/lean:3.14.0"
 path = "src"
 
 [dependencies]
-mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "9d762df7cb644cf59636ae89c1ea7fe8ceedbdd8"}
+mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "e9ba32d122e65de435e8a3c78a34992c3b506cb3"}
