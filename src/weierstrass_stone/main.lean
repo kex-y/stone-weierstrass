@@ -53,7 +53,7 @@ attribute [reducible] closure₀ closure₁ closure₂
 /-
 It's easy to see that M₀ ⊆ closure₀ M₀ ⊆ closure₁ M₀ ⊆ closure₂ M₀.
 In fact, closure₁ M₀ = closure₂ M₀
--/
+
 lemma closure_le_seq₀ {M₀ : set (bounded_continuous_function X ℝ)} :
 M₀ ⊆ closure₀ M₀ := sorry
 
@@ -62,6 +62,7 @@ closure₀ M₀ ⊆ closure₁ M₀ := sorry
 
 lemma closure_le_seq₂ {M₀ : set (bounded_continuous_function X ℝ)} :
 closure₁ M₀ = closure₂ M₀ := sorry
+-/
 
 /-
 The first lemma we need states that:
@@ -75,11 +76,11 @@ f ∈ closure₂ M₀ ↔
 lemma dense_at_points_in_closure
 {M₀ : set (bounded_continuous_function X ℝ)}
 {f : bounded_continuous_function X ℝ} 
-(h : f ∈ closure₂ M₀) : ∀ x y : X, ∀ ε > 0, 
+(h : f ∈ closure₂ M₀) : ∀ ε > 0, ∀ x y : X,
 ∃ (g : bounded_continuous_function X ℝ) (H : g ∈ closure₀ M₀), 
 abs (f x - g x) < ε ∧ abs (f y - g y) < ε := 
 begin
-  rcases h with ⟨g, h, hg, hh, h⟩; intros x y ε hε,
+  rcases h with ⟨g, h, hg, hh, h⟩; intros ε hε x y,
     { cases h with hlub hglb, 
         exact ⟨g ⊔ h, ⟨g, h, hg, hh, or.inl rfl⟩, by simpa [hlub, hε]⟩,
         exact ⟨g ⊓ h, ⟨g, h, hg, hh, or.inr rfl⟩, by simpa [hglb, hε]⟩ },
@@ -123,49 +124,107 @@ Now, as g_xᵢ(z) > f(z) - ε, for all i, so is h(z) > f(z) - ε and hence
 there is a function in closure₀ M₀ thats arbitarily close to f. 
 -/
 
-#check finset.sup
-
+-- compact.elim_finite_subcover require semilattices which we will assume
 instance : semilattice_sup_bot (bounded_continuous_function X ℝ) := sorry
+instance : semilattice_inf_top (bounded_continuous_function X ℝ) := sorry
 
-example {M₀ : set (bounded_continuous_function X ℝ)}
-{f : bounded_continuous_function X ℝ}
+variables {M₀ : set (bounded_continuous_function X ℝ)}
+
+lemma le_finset_sup {I : finset X} (g : X → bounded_continuous_function X ℝ) :
+∀ i ∈ I, ∀ x : X, g i x ≤ (I.sup g) x := sorry
+
+lemma finset_sup_lt {I : finset X} {g : X → bounded_continuous_function X ℝ} 
+{x} {r} (hlt : ∀ i ∈ I, g i x < r) : (I.sup g) x < r := sorry
+
+lemma finset_sup_mem_closure₀ {I : finset X} {g : X → bounded_continuous_function X ℝ} 
+(hg : ∀ i, g i ∈ closure₀ M₀) : I.sup g ∈ closure₀ M₀ := sorry
+
+lemma finset_inf_le {I : finset X} (g : X → bounded_continuous_function X ℝ) :
+∀ i ∈ I, ∀ x : X, (I.inf g) x ≤ g i x := sorry
+
+lemma lt_finset_inf {I : finset X} {g : X → bounded_continuous_function X ℝ} 
+{x} {r} (hlt : ∀ i ∈ I, r < g i x) : r < (I.inf g) x := sorry
+
+lemma finset_inf_mem_closure₀ {I : finset X} {g : X → bounded_continuous_function X ℝ} 
+(hg : ∀ i, g i ∈ closure₀ M₀) : I.inf g ∈ closure₀ M₀ := sorry
+
+private lemma is_open_aux_set₀ {f : bounded_continuous_function X ℝ} 
+{g : X → bounded_continuous_function X ℝ} {ε : ℝ} (hε : ε > 0) : 
+∀ y : X, is_open {z : X | f z - (g y) z < ε} := sorry
+
+private lemma is_open_aux_set₁ {f : bounded_continuous_function X ℝ} 
+{g : X → bounded_continuous_function X ℝ} {ε : ℝ} (hε : ε > 0) : 
+∀ x : X, is_open {z : X | g x z < f z + ε} := sorry
+
+/- Given x ∈ X, we create a function thats greater than f(z) - ε at all z while 
+smaller than f(x) + ε.
+-/
+lemma has_bcf_gt {f : bounded_continuous_function X ℝ}
 (h : ∀ ε > 0, ∀ x y : X, ∃ (g : bounded_continuous_function X ℝ) 
-(H : g ∈ closure₀ M₀), abs (f y - g y) < ε) : 
-∀ x : X, ∀ ε > 0, ∃ g : X → ℝ, ∀ z : X, g z < f z + ε := 
+(H : g ∈ closure₀ M₀), abs (f x - g x) < ε ∧ abs (f y - g y) < ε) : 
+∀ ε > 0, ∀ x : X, ∃ (g : bounded_continuous_function X ℝ) 
+(H : g ∈ closure₀ M₀), ∀ z : X, f z - ε < g z ∧ g x < f x + ε := 
 begin
-  intros x ε hε,
-  choose g hg₀ hg₁ using h ε (by {norm_cast, exact hε}) x,
-  let S : X → set X := λ y, {z | f z - g y z < ε},
-  have hc := _inst_2.1, 
-  cases compact.elim_finite_subcover hc S _ _ with I hI,
-    { let h := I.sup g,
-      refine ⟨h, λ z, _⟩,
-      suffices : ∀ i, g i z < f z + ε,
-        sorry,
-      sorry },
-    { sorry },
-    intros y hy, exact mem_Union.2 ⟨y, (abs_lt.1 $ hg₁ y).2⟩,
+  intros ε hε x, choose g hg₀ hg₁ using h ε (by {norm_cast, exact hε}) x,
+  let S : X → set X := λ y, {z | f z - g y z < ε}, 
+  cases compact.elim_finite_subcover _inst_2.1 S 
+    (is_open_aux_set₀ (by norm_cast; exact hε)) _ with I hI,
+    { let p := I.sup g,
+      refine ⟨p, finset_sup_mem_closure₀ hg₀, 
+        λ z, ⟨_, finset_sup_lt (λ i hi, by linarith [(abs_lt.1 (hg₁ i).1).1])⟩⟩,
+        suffices : ∃ i ∈ I, f z - ε < g i z,
+            rcases this with ⟨i, hi₀, hi₁⟩,
+            exact lt_of_lt_of_le hi₁ (le_finset_sup g i hi₀ z),
+        have : z ∈ ⋃ (i : X) (H : i ∈ I), S i, exact hI (by trivial),
+        cases mem_Union.1 this with i hi, cases mem_Union.1 hi with hi hz,
+        rw mem_set_of_eq at hz, exact ⟨i, hi, by linarith⟩ },
+    { intros y hy, exact mem_Union.2 ⟨y, (abs_lt.1 (hg₁ y).2).2⟩ }
 end
 
-example {M₀ : set (bounded_continuous_function X ℝ)}
-{f : bounded_continuous_function X ℝ}
+/- We again use the same method obtaining a function arbitarily close to f -/
+lemma has_bcf_close {f : bounded_continuous_function X ℝ}
 (h : ∀ ε > 0, ∀ x y : X, ∃ (g : bounded_continuous_function X ℝ) 
-(H : g ∈ closure₀ M₀), abs (f y - g y) < ε) : 
-∀ x : X, ∀ ε > 0, ∃ g : X → ℝ, ∀ z : X, g z < f z + ε := sorry
-
-lemma in_closure₂_of_dense_at_points 
-{M₀ : set (bounded_continuous_function X ℝ)}
-{f : bounded_continuous_function X ℝ}
-(h : ∀ x y : X, ∀ ε > 0, ∃ (g : bounded_continuous_function X ℝ) (H : g ∈ closure₀ M₀), 
-abs (f x - g x) < ε ∧ abs (f y - g y) < ε) : 
-f ∈ closure₂ M₀ := 
+(H : g ∈ closure₀ M₀), abs (f x - g x) < ε ∧ abs (f y - g y) < ε) : 
+∀ (ε : ℝ) (hε : 0 < ε), ∃ (g : bounded_continuous_function X ℝ) 
+(H : g ∈ closure₀ M₀), ∀ z : X, abs (f z - g z) < ε := 
 begin
-  sorry
+  intros ε hε, choose g hg₀ hg₁ using has_bcf_gt h ε hε,
+  let S : X → set X := λ x, {z | g x z < f z + ε},
+  cases compact.elim_finite_subcover _inst_2.1 S (is_open_aux_set₁ hε) _ with I hI,
+    { let p := I.inf g, refine ⟨p, finset_inf_mem_closure₀ hg₀, λ z, _⟩, 
+      rw abs_lt, refine ⟨_, _⟩,
+        { rw neg_lt_sub_iff_lt_add,
+          suffices : ∃ i ∈ I, g i z < f z + ε, 
+            rcases this with ⟨i, hi₀, hi₁⟩,
+            refine lt_of_le_of_lt (finset_inf_le g i hi₀ z) hi₁,             
+          have : z ∈ ⋃ (i : X) (H : i ∈ I), S i, refine hI (by trivial),
+          cases mem_Union.1 this with i hi, cases mem_Union.1 hi with hi hz,
+          refine ⟨i, hi, hz⟩ },
+        { suffices : ∀ i ∈ I, f z - ε < g i z, 
+            exact sub_lt.2 (lt_finset_inf this),
+          intros i hi, exact (hg₁ i z).1 } },
+    { intros x hx, exact mem_Union.2 ⟨x, (hg₁ x x).2⟩ }
+end
+
+/- With that we conclude that there is some sequence of functions in closure₀ M₀ 
+that is uniformly convergent towards f -/
+lemma in_closure₂_of_dense_at_points {f : bounded_continuous_function X ℝ}
+(h : ∀ ε > 0, ∀ x y : X, ∃ (g : bounded_continuous_function X ℝ) 
+(H : g ∈ closure₀ M₀), abs (f x - g x) < ε ∧ abs (f y - g y) < ε) : 
+f ∈ closure₂ M₀ := or.inr $
+begin
+  choose F hF₀ hF₁ using λ (n : ℕ), 
+    has_bcf_close h (1 / (n + 1)) (nat.one_div_pos_of_nat),
+  refine ⟨F, hF₀, λ ε hε, _⟩,
+  cases exists_nat_gt (1 / ε) with N hN,
+  refine ⟨N, λ n hn x, lt_of_lt_of_le (hF₁ n x) $ 
+    one_div_le_of_one_div_le_of_pos hε $ le_trans (le_of_lt hN) _⟩,
+  norm_cast, exact le_add_right hn,
 end
 
 theorem in_closure₂_iff_dense_at_points 
-{M₀ : set (bounded_continuous_function X ℝ)}
 {f : bounded_continuous_function X ℝ} : 
-f ∈ closure₂ M₀ ↔ ∀ x y : X, ∀ ε > 0, 
+f ∈ closure₂ M₀ ↔ ∀ ε > 0, ∀ x y : X,
 ∃ (g : bounded_continuous_function X ℝ) (H : g ∈ closure₀ M₀), 
-abs (f x - g x) < ε ∧ abs (f y - g y) < ε := sorry
+abs (f x - g x) < ε ∧ abs (f y - g y) < ε := 
+⟨λ h, dense_at_points_in_closure h, λ h, in_closure₂_of_dense_at_points h⟩
