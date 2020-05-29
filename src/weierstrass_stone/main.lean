@@ -1,8 +1,9 @@
 import topology.bounded_continuous_function
-import weierstrass_stone.definitions
 
 noncomputable theory
 open set 
+
+-- I will refactor this I promise!
 
 variables {X : Type*} [metric_space X] [compact_space X]
 
