@@ -1,4 +1,5 @@
 import topology.bounded_continuous_function
+import ralgebra
 
 noncomputable theory
 open set classical
@@ -36,10 +37,12 @@ def unif_converges_to {α} (F : ℕ → α → ℝ) (f : α → ℝ) :=
 def closure₀ (M₀ : set (X →ᵇ ℝ)) :=
   {h : X →ᵇ ℝ | ∃ f g ∈ M₀, h = f ⊔ g ∨ h = f ⊓ g}
 
+/-
 -- Closure₁ is the closure of closure₀ under uniform convergence
 def closure₁ (M₀ : set (X →ᵇ ℝ)) := 
   {h : X →ᵇ ℝ | ∃ (F : ℕ → (X →ᵇ ℝ)) 
     (H : ∀ i, F i ∈ closure₀ M₀), unif_converges_to (λ n, F n) h}
+-/
 
 /- In Stone's proof, he also describes a closure₂ M₀ thats the closure of M₀ under 
 all three operations. -/
@@ -47,7 +50,7 @@ def closure₂ (M₀ : set (X →ᵇ ℝ)) :=
   {h : X →ᵇ ℝ | (∃ f g ∈ M₀, h = f ⊔ g ∨ h = f ⊓ g) ∨ 
   ∃ (F : ℕ → X →ᵇ ℝ) (H : ∀ i, F i ∈ closure₀ M₀), unif_converges_to (λ n, F n) h}
 
-attribute [reducible] closure₀ closure₁ closure₂
+attribute [reducible] closure₀ closure₂
 
 lemma closure₂_of_closure₂ (M₀ : set (X →ᵇ ℝ)) : 
 closure₂ (closure₂ M₀) = closure₂ M₀ := sorry
@@ -71,16 +74,13 @@ lemma closure₀_closed_with_inf {M₀ : set (X →ᵇ ℝ)} {f g}
 /-
 It's easy to see that M₀ ⊆ closure₀ M₀ ⊆ closure₁ M₀ ⊆ closure₂ M₀.
 In fact, closure₁ M₀ = closure₂ M₀
+-/
 
 lemma closure_le_seq₀ {M₀ : set (X →ᵇ ℝ)} :
 M₀ ⊆ closure₀ M₀ := sorry
 
 lemma closure_le_seq₁ {M₀ : set (X →ᵇ ℝ)} :
-closure₀ M₀ ⊆ closure₁ M₀ := sorry
-
-lemma closure_le_seq₂ {M₀ : set (X →ᵇ ℝ)} :
-closure₁ M₀ = closure₂ M₀ := sorry
--/
+closure₀ M₀ ⊆ closure₂ M₀ := sorry
 
 /-
 The first lemma we need states that:
@@ -113,7 +113,7 @@ This is the lemma we'll use: compact.elim_finite_subcover -/
 
 /-
 So let us fix x ∈ X and given y ∈ X write the function g satisfying 
-h : abs (f(x) - g(x)) < ε ∧ abs (f(y) -g(y)) < ε, f_y (the existence 
+h : abs (f(x) - g(x)) < ε ∧ abs (f(y) - g(y)) < ε, f_y (the existence 
 of which is guarenteed by our hypothesis), we define 
   S(y) := {z ∈ X | f(z) - f_y(z) < ε}
 It's obvious that y ∈ S(y) by h.right so 
@@ -272,7 +272,7 @@ sequences in ℝ².
 -/
 
 def boundary_points (M : set (X →ᵇ ℝ)) (x y : X) := 
-  {z | ∃ (f : X →ᵇ ℝ) (hf : f ∈ closure₀ M), (f x, f y) = z}
+  {z | ∃ (f : X →ᵇ ℝ) (hf : f ∈ M), (f x, f y) = z}
 
 lemma boundary_points_of_univ : ∀ x y : X, boundary_points univ x y = univ := sorry
 
@@ -289,14 +289,14 @@ def closure' (S : set (ℝ × ℝ)) :=
 
 attribute [reducible] boundary_points closure'
 
-lemma in_closure'_of_in_closoure₂ {f : X →ᵇ ℝ} (h : f ∈ closure₂ M₀) : 
-∀ x y : X, (f x, f y) ∈ closure' (boundary_points M₀ x y) :=
+lemma in_closure'_of_in_closoure₂ {f : X →ᵇ ℝ} (h : f ∈ closure₂ M₀) 
+(hc : closure₀ M₀ = M₀) : ∀ x y : X, (f x, f y) ∈ closure' (boundary_points M₀ x y) :=
 begin
   intros x y, right,
   rw in_closure₂_iff_dense_at_points at h,
   choose F hF₀ hF₁ using λ (n : ℕ), 
     h (1 / (n + 1)) (nat.one_div_pos_of_nat) x y,
-  refine ⟨λ n, (F n x, F n y), λ n, ⟨F n, hF₀ n, rfl⟩, λ ε hε, _⟩, 
+  refine ⟨λ n, (F n x, F n y), λ n, ⟨F n, hc ▸ hF₀ n, rfl⟩, λ ε hε, _⟩, 
   cases exists_nat_gt (1 / ε) with N hN,
   refine ⟨N, λ n hn, _⟩,
   suffices : abs (F n x - f x) < ε ∧ abs (F n y - f y) < ε,
@@ -313,32 +313,33 @@ lemma bcf_pair_sup_eq_bcf_sup_pair {u v : X →ᵇ ℝ} {x y} :
 lemma bcf_pair_inf_eq_bcf_inf_pair {u v : X →ᵇ ℝ} {x y} : 
 (u x, u y) ⊓ (v x, v y) = ((u ⊓ v) x, (u ⊓ v) y) := rfl
 
-lemma in_closure₂_of_in_closure' {f : X →ᵇ ℝ} 
+lemma in_closure₂_of_in_closure' {f : X →ᵇ ℝ} (hc : closure₀ M₀ = M₀)
 (h : ∀ x y : X, (f x, f y) ∈ closure' (boundary_points M₀ x y)) : f ∈ closure₂ M₀ :=
 begin
   rw in_closure₂_iff_dense_at_points,
   intros ε hε x y,
   cases h x y with h' h',
     { rcases h' with ⟨r, t, ⟨u, hu₀, hu₁⟩, ⟨v, hv₀, hv₁⟩, hrt⟩,
-      cases hrt,
-        { refine ⟨u ⊔ v, closure₀_closed_with_sup hu₀ hv₀, _⟩,
+      cases hrt, rw hc,
+        { refine ⟨u ⊔ v, (hc ▸ closure₀_closed_with_sup) hu₀ hv₀, _⟩,
           rw [←hu₁, ←hv₁, bcf_pair_sup_eq_bcf_sup_pair] at hrt,
           rw [(prod.mk.inj hrt).1, (prod.mk.inj hrt).2], simpa },
-        { refine ⟨u ⊓ v, closure₀_closed_with_inf hu₀ hv₀, _⟩,
+        { refine ⟨u ⊓ v, closure₀_closed_with_inf _ _, _⟩;
+          try { rw hc, assumption }, 
           rw [←hu₁, ←hv₁, bcf_pair_inf_eq_bcf_inf_pair] at hrt,
           rw [(prod.mk.inj hrt).1, (prod.mk.inj hrt).2], simpa } },
     { rcases h' with ⟨s, hs₀, hs₁⟩,
       cases hs₁ ε hε with N hN, 
       rcases hs₀ N with ⟨g, hg₀, hg₁⟩,
-      refine ⟨g, hg₀, _⟩,
+      refine ⟨g, _, _⟩, rw hc, assumption,
       have := hN N (le_refl N),
       rw ←hg₁ at this, unfold dist at this, simp at this,
       split; rw abs_sub; simp only [this] }
 end
 
-lemma in_closure₂_iff_in_closure' {f : X →ᵇ ℝ} : 
+lemma in_closure₂_iff_in_closure' {f : X →ᵇ ℝ} (hc : closure₀ M₀ = M₀) : 
 f ∈ closure₂ M₀ ↔ ∀ x y : X, (f x, f y) ∈ closure' (boundary_points M₀ x y) :=
-⟨λ h, in_closure'_of_in_closoure₂ h, λ h, in_closure₂_of_in_closure' h⟩
+⟨λ h, in_closure'_of_in_closoure₂ h hc, λ h, in_closure₂_of_in_closure' hc h⟩
 
 /- 
 With this, we can formulate the relation between M₀ and M₀'(x, y) formally, i.e.
@@ -351,13 +352,21 @@ lemma boundary_points_eq_of_eq (M₀ M₁ : set (X →ᵇ ℝ)) (h : M₀ = M₁
 ∀ x y : X, boundary_points M₀ x y = boundary_points M₁ x y := 
 λ x y, by rw h
 
+lemma closure₀_eq_of_closure₂_eq {M₀ : set (X →ᵇ ℝ)} (h : closure₂ M₀ = M₀) :
+closure₀ M₀ = M₀ := sorry
+
 lemma eq_of_boundary_points_eq (M₀ M₁ : set (X →ᵇ ℝ))
 (h : ∀ x y : X, boundary_points M₀ x y = boundary_points M₁ x y)
 (hM₀ : M₀ = closure₂ M₀) (hM₁ : M₁ = closure₂ M₁) : M₀ = M₁ := 
 begin
   ext f, split; intro hf;
   { try {rw hM₀ <|> rw hM₁}, try {rw hM₀ at hf <|> rw hM₁ at hf},
-    rw in_closure₂_iff_in_closure' at *, 
+    try {
+      rw in_closure₂_iff_in_closure' (closure₀_eq_of_closure₂_eq hM₁.symm), 
+      rw in_closure₂_iff_in_closure' (closure₀_eq_of_closure₂_eq hM₀.symm) at hf},
+    try {
+      rw in_closure₂_iff_in_closure' (closure₀_eq_of_closure₂_eq hM₁.symm) at hf, 
+      rw in_closure₂_iff_in_closure' (closure₀_eq_of_closure₂_eq hM₀.symm)},
     intros x y, try {rw ←h x y <|> rw h x y},
     exact hf x y }
 end
@@ -384,3 +393,170 @@ begin
     { intro h, rw this, intros x y, rw h x y, 
       exact (boundary_points_of_univ x y).symm }
 end
+
+/- In ralgebra.lean we proved the following result: 
+
+  theorem subalgebra_of_R2 (S : subalgebra ℝ (ℝ × ℝ)) :
+  S.carrier = {(0, 0)} ∨
+  S.carrier = {p | ∃ x : ℝ, p = (x, 0)} ∨
+  S.carrier = {p | ∃ y : ℝ, p = (0, y)} ∨
+  S.carrier = {p | ∃ z : ℝ, p = (z, z)} ∨ 
+  S.carrier = univ
+
+So since ℝ² is a trivial subalgebra of itself, for ∀ x y, 
+boundary_points (closure₂ M₀) x y = ℝ², boundary_points (closure₂ M₀) x y 
+is required to be a subalgebra of ℝ², i.e. 
+- closed under coordinates addition and multiplication
+- closed under scalar multiplication
+
+This implies closure₂ M₀ must be closed under function addition and 
+multiplication (by an argument similar to the first). 
+
+Suppose boundary_points (closure₂ M₀) is a subalgebra of ℝ² and
+∃ f g ∈ closure₂ M₀, f + g ∉ closure₂ M₀, then ∀ x, y ∈ X, 
+(f(x) + g(x), f(y) + g(y)) ∈ boundary_points implying ∀ x, there 
+is some function h ∈ closure₂ M₀, h_y(y) = (f + g)(y).
+We now define 
+  S(y) := {z ∈ X | (f + g)(z) = h_y(z)}
+y ∈ S(y) by construction so 
+  X ⊆ ⋃ (y : X) S(y) ⇒ X = ⋃ (y : X) S(y)
+and hence, by Heine-Borel, ∃ i ∈ {1, ⋯, n} = I such that 
+  X  = ⋃ (i ∈ I) S(yᵢ) (*).
+Thus we see that ∀ ε > 0, by defining 
+  u_x := ⊔ (i ∈ I) h_yᵢ,
+we have ∀ y, (by (*)) ∃ i ∈ I, h_yᵢ(y) = (f + g)(y), then
+  u_x(y) ≥ h_yᵢ(y) = (f + g)(y) > (f + g)(y) - ε
+I think you can see where I'm going with this...
+-/
+
+/-
+Okay, so what does Weierstrass-Stone actually say? 
+- Let M₀ be a subalgebra of (X →ᵇ ℝ) that's **closed** (M₂ = closure₀ M₀) 
+and has seperate points. Then either closure₂ M₀ = univ or ∃ x₀ ∈ X,
+closure₂ M₀ = {f : X →ᵇ ℝ | f(x₀) = 0}.
+-/
+
+def has_seperate_points (M₀ : set (X →ᵇ ℝ)) :=
+  ∀ x y : X, x ≠ y → ∃ (f : X →ᵇ ℝ) (hf : f ∈ M₀), f x ≠ f y
+
+lemma zero_mem_of_subalgebra {M₀' : subalgebra ℝ (X →ᵇ ℝ)} :
+(0 : X →ᵇ ℝ) ∈ M₀'.carrier := M₀'.2.1.1.1
+
+lemma one_mem_of_subalgebra {M₀' : subalgebra ℝ (X →ᵇ ℝ)} :
+(1 : X →ᵇ ℝ) ∈ M₀'.carrier := M₀'.2.2.1
+
+lemma neg_mem_of_subalgebra {M₀' : subalgebra ℝ (X →ᵇ ℝ)} :
+∀ f ∈ M₀'.carrier, -f ∈ M₀'.carrier := M₀'.2.1.2
+
+lemma add_mem_of_subalgebra {M₀' : subalgebra ℝ (X →ᵇ ℝ)} :
+∀ f g ∈ M₀'.carrier, f + g ∈ M₀'.carrier := M₀'.2.1.1.2
+
+lemma mul_mem_of_subalgebra {M₀' : subalgebra ℝ (X →ᵇ ℝ)} :
+∀ f g ∈ M₀'.carrier, f * g ∈ M₀'.carrier := M₀'.2.2.2
+
+lemma zero_mem_of_boundary_points {M₀' : subalgebra ℝ (X →ᵇ ℝ)} 
+{x y} (hc : closure₀ M₀'.carrier = M₀'.carrier) :
+(0 : ℝ × ℝ) ∈ boundary_points (closure₂ M₀'.carrier) x y :=
+begin
+  refine ⟨(0 : X →ᵇ ℝ), _, _⟩, 
+  apply closure_le_seq₁, rw hc, 
+  exact zero_mem_of_subalgebra,
+  refl
+end
+
+lemma one_mem_of_boundary_points {M₀' : subalgebra ℝ (X →ᵇ ℝ)} 
+{x y} (hc : closure₀ M₀'.carrier = M₀'.carrier) :
+(1 : ℝ × ℝ) ∈ boundary_points (closure₂ M₀'.carrier) x y := 
+begin
+  refine ⟨(1 : X →ᵇ ℝ), _, _⟩, 
+  apply closure_le_seq₁, rw hc, 
+  exact one_mem_of_subalgebra,
+  refl
+end
+
+lemma neg_inf_eq_sup {f g h : X →ᵇ ℝ} : f = g ⊔ h ↔ -f = -g ⊓ -h := sorry
+lemma neg_sup_eq_inf {f g h : X →ᵇ ℝ} : f = g ⊓ h ↔ -f = -g ⊔ -h := sorry
+
+lemma neg_unif_converges_to {f : X →ᵇ ℝ} {F : ℕ → (X →ᵇ ℝ)} 
+(hF : unif_converges_to (λ n, F n) f) : unif_converges_to (λ n, -F n) (-f) :=
+sorry
+
+/- neg_mem is a bit trickier since we need to show that closure₂ 
+is closed under neg (note that we are not assuming closure₂ M₀ is 
+a subalgebra). To prove this we construct an uniformly convergent sequence 
+of functions in M₀ that converges to -f. -/
+lemma neg_mem_of_boundary_points {M₀' : subalgebra ℝ (X →ᵇ ℝ)} 
+{x y} (hc : closure₀ M₀'.carrier = M₀'.carrier) :
+∀ β ∈ boundary_points (closure₂ M₀'.carrier) x y,
+-β ∈ boundary_points (closure₂ M₀'.carrier) x y :=
+begin
+  intros β hβ, rcases hβ with ⟨f, hf₀, hf₁⟩,
+  refine ⟨-f, _, _⟩,
+  cases hf₀,
+    { rcases hf₀ with ⟨g, h, hg, hh, hgh⟩,
+      cases hgh; left,
+      refine ⟨-g, -h, neg_mem_of_subalgebra g hg, neg_mem_of_subalgebra h hh, _⟩,
+      right, exact neg_inf_eq_sup.1 hgh,
+      refine ⟨-g, -h, neg_mem_of_subalgebra g hg, neg_mem_of_subalgebra h hh, _⟩,
+      left, exact neg_sup_eq_inf.1 hgh },
+    { rcases hf₀ with ⟨F, hF₀, hF₁⟩,
+      right, 
+      refine ⟨λ n, -F n, λ i, _, _⟩,
+      rw hc at *, exact neg_mem_of_subalgebra (F i) (hF₀ i),
+      exact neg_unif_converges_to hF₁ },
+    rw ←hf₁, refl
+end
+
+/- It is a similar story for add_mem and mul_mem. These requires 
+- if λ n, F n ⟶ f and λ n, G n ⟶ g, then λ n, F n + G n ⟶ f + g
+- if λ n, F n ⟶ f and λ n, G n ⟶ g, then λ n, F n * G n ⟶ f * g
+respectively (both of which are standar results).
+-/
+lemma add_mem_of_boundary_points {M₀' : subalgebra ℝ (X →ᵇ ℝ)} 
+{x y} (hc : closure₀ M₀'.carrier = M₀'.carrier) :
+∀ β γ ∈ boundary_points (closure₂ M₀'.carrier) x y,
+β + γ ∈ boundary_points (closure₂ M₀'.carrier) x y := sorry
+
+lemma mul_mem_of_boundary_points {M₀' : subalgebra ℝ (X →ᵇ ℝ)} 
+{x y} (hc : closure₀ M₀'.carrier = M₀'.carrier) :
+∀ β γ ∈ boundary_points (closure₂ M₀'.carrier) x y,
+β * γ ∈ boundary_points (closure₂ M₀'.carrier) x y := sorry
+
+/- The boundary points of a closed subalgebra of (X →ᵇ ℝ) over ℝ
+form a subring. -/
+lemma is_subring_boundary_points {M₀' : subalgebra ℝ (X →ᵇ ℝ)}
+{x y} (hc : closure₀ M₀'.carrier = M₀'.carrier) : 
+is_subring (boundary_points (closure₂ M₀'.carrier) x y) :=
+{ zero_mem := zero_mem_of_boundary_points hc,
+  add_mem := add_mem_of_boundary_points hc,
+  neg_mem := neg_mem_of_boundary_points hc,
+  one_mem := one_mem_of_boundary_points hc,
+  mul_mem := mul_mem_of_boundary_points hc }
+
+/- We now need to prove that (r, r) is in the boundary points.
+This is true since M₀' is a subalgebra ⇒ 1 ∈ M₀'.carrier and 
+∀ μ ∈ ℝ, ∀ f ∈ M₀'.carrier, μf ∈ M₀'.carrier ⇒ r • 1 ∈ M₀'.carrier -/
+lemma subalgebra_closed_under_smul' {M₀' : subalgebra ℝ (X →ᵇ ℝ)} :
+∀ (α : ℝ) {x}, x ∈ M₀'.carrier → α • x ∈ M₀'.carrier := sorry
+
+lemma boundary_points_range_le {M₀' : subalgebra ℝ (X →ᵇ ℝ)}
+{x y} (hc : closure₀ M₀'.carrier = M₀'.carrier) :  
+range (algebra_map ℝ (ℝ × ℝ)) ≤ boundary_points (closure₂ M₀'.carrier) x y :=
+begin
+  intros z hz, cases mem_range.1 hz with r hr,
+  refine ⟨r • 1, _, _⟩,
+  apply closure_le_seq₁, rw hc,
+  exact subalgebra_closed_under_smul' r one_mem_of_subalgebra,
+  suffices : (r, r) = z,
+    simpa [show ∀ x, (1 : X →ᵇ ℝ) x = 1, by intro z; refl],
+  rw ←hr, refl
+end
+
+/- With that, we can construct a subalgebra of ℝ² with underlying 
+set being boundary_points (closure₂ M₀'.carrier) x y-/
+def subalgebra_of_boundary_points {M₀' : subalgebra ℝ (X →ᵇ ℝ)}
+{x y} (hc : closure₀ M₀'.carrier = M₀'.carrier) : 
+  subalgebra ℝ (ℝ × ℝ) :=
+{ carrier := boundary_points (closure₂ M₀'.carrier) x y,
+  subring := is_subring_boundary_points hc,
+  range_le' := boundary_points_range_le hc}
