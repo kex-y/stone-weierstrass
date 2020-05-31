@@ -402,31 +402,6 @@ end
   S.carrier = {p | ∃ y : ℝ, p = (0, y)} ∨
   S.carrier = {p | ∃ z : ℝ, p = (z, z)} ∨ 
   S.carrier = univ
-
-So since ℝ² is a trivial subalgebra of itself, for ∀ x y, 
-boundary_points (closure₂ M₀) x y = ℝ², boundary_points (closure₂ M₀) x y 
-is required to be a subalgebra of ℝ², i.e. 
-- closed under coordinates addition and multiplication
-- closed under scalar multiplication
-
-This implies closure₂ M₀ must be closed under function addition and 
-multiplication (by an argument similar to the first). 
-
-Suppose boundary_points (closure₂ M₀) is a subalgebra of ℝ² and
-∃ f g ∈ closure₂ M₀, f + g ∉ closure₂ M₀, then ∀ x, y ∈ X, 
-(f(x) + g(x), f(y) + g(y)) ∈ boundary_points implying ∀ x, there 
-is some function h ∈ closure₂ M₀, h_y(y) = (f + g)(y).
-We now define 
-  S(y) := {z ∈ X | (f + g)(z) = h_y(z)}
-y ∈ S(y) by construction so 
-  X ⊆ ⋃ (y : X) S(y) ⇒ X = ⋃ (y : X) S(y)
-and hence, by Heine-Borel, ∃ i ∈ {1, ⋯, n} = I such that 
-  X  = ⋃ (i ∈ I) S(yᵢ) (*).
-Thus we see that ∀ ε > 0, by defining 
-  u_x := ⊔ (i ∈ I) h_yᵢ,
-we have ∀ y, (by (*)) ∃ i ∈ I, h_yᵢ(y) = (f + g)(y), then
-  u_x(y) ≥ h_yᵢ(y) = (f + g)(y) > (f + g)(y) - ε
-I think you can see where I'm going with this...
 -/
 
 /-
@@ -555,8 +530,46 @@ end
 /- With that, we can construct a subalgebra of ℝ² with underlying 
 set being boundary_points (closure₂ M₀'.carrier) x y-/
 def subalgebra_of_boundary_points {M₀' : subalgebra ℝ (X →ᵇ ℝ)}
-{x y} (hc : closure₀ M₀'.carrier = M₀'.carrier) : 
+(x y) (hc : closure₀ M₀'.carrier = M₀'.carrier) : 
   subalgebra ℝ (ℝ × ℝ) :=
 { carrier := boundary_points (closure₂ M₀'.carrier) x y,
   subring := is_subring_boundary_points hc,
   range_le' := boundary_points_range_le hc}
+
+/- Now that we have proved that given a closed subalgebra of X →ᵇ ℝ over 
+ℝ - M₀', boundary_points (closure₂ M₀'.carrier) x y form a subalgebra of 
+ℝ², we can use this fact in combination of our theorem from ralgebra.lean 
+concluding boundary_points (closure₂ M₀'.carrier) x y must be 
+  {(0, 0)} ∨ {p | ∃ x : ℝ, p = (x, 0)} ∨
+  {p | ∃ y : ℝ, p = (0, y)} ∨ {p | ∃ z : ℝ, p = (z, z)} ∨ ℝ²
+Now due to `one_mem_of_boundary_points`, we eliminate our possiblities to 
+{p | ∃ z : ℝ, p = (z, z)} ∨ ℝ², the first of which is not possible if 
+we have seperate points.
+-/
+theorem weierstrass_stone {M₀' : subalgebra ℝ (X →ᵇ ℝ)} 
+(hc   : closure₀ M₀'.carrier = M₀'.carrier) 
+(hsep : has_seperate_points M₀'.carrier) 
+(hns  : ∃ β γ : X, β ≠ γ):
+closure₂ M₀'.carrier = univ :=
+begin
+  rw func_dense_iff_boundary_points_dense,
+  intros x y,
+  cases subalgebra_of_R2 (subalgebra_of_boundary_points x y hc),
+    { suffices : ((1, 1) : ℝ × ℝ) ∈ (subalgebra_of_boundary_points x y hc).carrier,
+        exfalso, rw [h, mem_singleton_iff] at this, 
+        replace this := congr_arg prod.fst this, simp at this, assumption,
+      exact one_mem_of_boundary_points hc },
+  cases h,
+    { suffices : ((1, 1) : ℝ × ℝ) ∈ (subalgebra_of_boundary_points x y hc).carrier,
+        exfalso, rw h at this, cases this with r hr,
+        simp at hr, assumption,
+      exact one_mem_of_boundary_points hc },
+  cases h,
+    { suffices : ((1, 1) : ℝ × ℝ) ∈ (subalgebra_of_boundary_points x y hc).carrier,
+        exfalso, rw h at this, cases this with r hr,
+        simp at hr, assumption,
+      exact one_mem_of_boundary_points hc },
+  cases h,
+    { sorry },
+    { exact h }
+end

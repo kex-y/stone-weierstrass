@@ -28,9 +28,6 @@ As ℝ over ℝ is already an R-algebra, we just have to prove the isometry part
 which is true by definition. -/
 instance : normed_algebra ℝ ℝ := ⟨λ x, rfl⟩
 
--- I do not think we need this 
--- theorem bcf_equiv_boundary : (X →ᵇ ℝ) ≃ₐ[ℝ] (ℝ × ℝ) := sorry
-
 /- The idea is to first prove that if M₀ is a subalgebra of BCF then its 
 boundary points form a subalgebra of ℝ². -/
 
