@@ -9,6 +9,12 @@ variables {X : Type*} [metric_space X] [compact_space X]
 -- We adopt the notation of bounded countinuous function from mathlib
 local infixr ` →ᵇ ` : 25 := bounded_continuous_function
 
+/- In this file we establish the main result - `subalgebra_of_R2` alongside some 
+other lemmas regarding algebra and subalgebras.
+
+We shall assume some trivial propositions with arguments in text form.
+-/
+
 -- We now need it to consider both ℝ² and X →ᵇ ℝ (BCF) as algebras. 
 instance R_R2_scalar_mul : has_scalar ℝ (ℝ × ℝ) := ⟨λ β x, (β * x.1, β * x.2)⟩
 
@@ -27,9 +33,6 @@ normed_algebra ℝ ℝ, so we will prove that here.
 As ℝ over ℝ is already an R-algebra, we just have to prove the isometry part 
 which is true by definition. -/
 instance : normed_algebra ℝ ℝ := ⟨λ x, rfl⟩
-
-/- The idea is to first prove that if M₀ is a subalgebra of BCF then its 
-boundary points form a subalgebra of ℝ². -/
 
 lemma subalgebra_nonempty (S : subalgebra ℝ (ℝ × ℝ)) : 
 ∃ x, x ∈ S.carrier := ⟨1, S.2.2.1⟩
@@ -60,15 +63,12 @@ begin
   simp only [mul_zero], exact ((eq_div_iff hβ).mp rfl).symm
 end
 
+/- The proof of this considers if β.1 ≠ β.2, β and β² are linearly independent
+and hence spans the entire space of ℝ² -/
 lemma non_zero_fst_snd {S : subalgebra ℝ (ℝ × ℝ)} {β γ} 
 (h₀ : (β : ℝ × ℝ) ∈ S.carrier) (hβ : β.1 ≠ 0) 
 (h₁ : (γ : ℝ × ℝ) ∈ S.carrier) (hγ : γ.2 ≠ 0) 
-(hβγ : β ≠ γ) : ∀ δ, δ ∈ S.carrier := λ δ,
-begin
-  -- The proof of this considers if β.1 ≠ β.2, β and β² are linearly independent
-  -- and hence spans the entire space of ℝ²
-  sorry
-end
+(hβγ : β ≠ γ) : ∀ δ, δ ∈ S.carrier := sorry
 
 lemma non_zero_eq {S : subalgebra ℝ (ℝ × ℝ)} {β} 
 (h : (β : ℝ × ℝ) ∈ S.carrier) (hβ : β.1 = β.2) (hnz : β ≠ 0): 

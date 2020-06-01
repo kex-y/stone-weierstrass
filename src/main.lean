@@ -1,59 +1,14 @@
 import topology.bounded_continuous_function
-import ralgebra
+import assumptions
 
 noncomputable theory
 open set classical
 local attribute [instance] prop_decidable
 
--- I will refactor this I promise!
-
 variables {X : Type*} [metric_space X] [compact_space X]
 
 -- We adopt the notation of bounded countinuous function from mathlib
 local infixr ` →ᵇ ` : 25 := bounded_continuous_function
-
-theorem max_bounded {f g : X → ℝ} 
-(hf :  ∃ (C : ℝ), ∀ (x y : X), dist (f x) (f y) ≤ C) 
-(hg :  ∃ (C : ℝ), ∀ (x y : X), dist (g x) (g y) ≤ C) :
-∃ (C : ℝ), ∀ (x y : X), dist (max (f x) (g x)) (max (f y) (g y)) ≤ C := sorry
-
-theorem min_bounded {f g : X → ℝ} 
-(hf :  ∃ (C : ℝ), ∀ (x y : X), dist (f x) (f y) ≤ C) 
-(hg :  ∃ (C : ℝ), ∀ (x y : X), dist (g x) (g y) ≤ C) :
-∃ (C : ℝ), ∀ (x y : X), dist (min (f x) (g x)) (min (f y) (g y)) ≤ C := sorry
-
-instance : has_sup (X →ᵇ ℝ) := 
-⟨λ f g, ⟨λ x, max (f x) (g x), continuous.max f.2.1 g.2.1, max_bounded f.2.2 g.2.2⟩⟩
-
-instance : has_inf (X →ᵇ ℝ) := 
-⟨λ f g, ⟨λ x, min (f x) (g x), continuous.min f.2.1 g.2.1, min_bounded f.2.2 g.2.2⟩⟩
-
-/- We define our own uniform convergence since I don't understand Lean's version 
-with filters -/
-def unif_converges_to {α} (F : ℕ → α → ℝ) (f : α → ℝ) :=
-  ∀ ε > 0, ∃ N : ℕ, ∀ n ≥ N, ∀ x : α, abs (f x - F n x) < ε
-
--- Closure₀ is the set of bounded continuous functions closed under inf and sup
-def closure₀ (M₀ : set (X →ᵇ ℝ)) :=
-  {h : X →ᵇ ℝ | ∃ f g ∈ M₀, h = f ⊔ g ∨ h = f ⊓ g}
-
-/-
--- Closure₁ is the closure of closure₀ under uniform convergence
-def closure₁ (M₀ : set (X →ᵇ ℝ)) := 
-  {h : X →ᵇ ℝ | ∃ (F : ℕ → (X →ᵇ ℝ)) 
-    (H : ∀ i, F i ∈ closure₀ M₀), unif_converges_to (λ n, F n) h}
--/
-
-/- In Stone's proof, he also describes a closure₂ M₀ thats the closure of M₀ under 
-all three operations. -/
-def closure₂ (M₀ : set (X →ᵇ ℝ)) := 
-  {h : X →ᵇ ℝ | (∃ f g ∈ M₀, h = f ⊔ g ∨ h = f ⊓ g) ∨ 
-  ∃ (F : ℕ → X →ᵇ ℝ) (H : ∀ i, F i ∈ closure₀ M₀), unif_converges_to (λ n, F n) h}
-
-attribute [reducible] closure₀ closure₂
-
-lemma closure₂_of_closure₂ (M₀ : set (X →ᵇ ℝ)) : 
-closure₂ (closure₂ M₀) = closure₂ M₀ := sorry
 
 lemma closure₂_of_univ : 
 closure₂ (@univ (X →ᵇ ℝ)) = univ :=
@@ -65,30 +20,11 @@ begin
       ext, simpa }
 end
 
-lemma closure₀_closed_with_sup {M₀ : set (X →ᵇ ℝ)} {f g} 
-(hf : f ∈ closure₀ M₀) (hg : g ∈ closure₀ M₀) : f ⊔ g ∈ closure₀ M₀ := sorry
-
-lemma closure₀_closed_with_inf {M₀ : set (X →ᵇ ℝ)} {f g} 
-(hf : f ∈ closure₀ M₀) (hg : g ∈ closure₀ M₀) : f ⊓ g ∈ closure₀ M₀ := sorry
-
-/-
-It's easy to see that M₀ ⊆ closure₀ M₀ ⊆ closure₁ M₀ ⊆ closure₂ M₀.
-In fact, closure₁ M₀ = closure₂ M₀
--/
-
-lemma closure_le_seq₀ {M₀ : set (X →ᵇ ℝ)} :
-M₀ ⊆ closure₀ M₀ := sorry
-
-lemma closure_le_seq₁ {M₀ : set (X →ᵇ ℝ)} :
-closure₀ M₀ ⊆ closure₂ M₀ := sorry
-
-/-
-The first lemma we need states that:
+/- The first lemma we need states that:
 
 f ∈ closure₂ M₀ ↔ 
 ∀ x, y ∈ X, ∀ ε > 0, ∃ f' ∈ closure₀ M₀, such that 
-|f(x) - f'(x)| < ε and |f(y) - f'(y)| < ε
--/
+|f(x) - f'(x)| < ε and |f(y) - f'(y)| < ε -/
 
 /- The forward direction is trivial -/
 lemma dense_at_points_in_closure
@@ -111,8 +47,7 @@ Since X is a compact space, We an use Heine-Borel on the entire space.
 
 This is the lemma we'll use: compact.elim_finite_subcover -/
 
-/-
-So let us fix x ∈ X and given y ∈ X write the function g satisfying 
+/- So let us fix x ∈ X and given y ∈ X write the function g satisfying 
 h : abs (f(x) - g(x)) < ε ∧ abs (f(y) - g(y)) < ε, f_y (the existence 
 of which is guarenteed by our hypothesis), we define 
   S(y) := {z ∈ X | f(z) - f_y(z) < ε}
@@ -138,42 +73,10 @@ Now, as g_xᵢ(z) > f(z) - ε, for all i, so is h(z) > f(z) - ε and hence
 there is a function in closure₀ M₀ thats arbitarily close to f. 
 -/
 
--- compact.elim_finite_subcover require semilattices which we will assume
-instance : semilattice_sup_bot (X →ᵇ ℝ) := sorry
-instance : semilattice_inf_top (X →ᵇ ℝ) := sorry
-
-variables {M₀ : set (X →ᵇ ℝ)}
-
-lemma le_finset_sup {I : finset X} (g : X → X →ᵇ ℝ) :
-∀ i ∈ I, ∀ x : X, g i x ≤ (I.sup g) x := sorry
-
-lemma finset_sup_lt {I : finset X} {g : X → X →ᵇ ℝ} {x} {r} 
-(hlt : ∀ i ∈ I, g i x < r) : (I.sup g) x < r := sorry
-
-lemma finset_sup_mem_closure₀ {I : finset X} {g : X → X →ᵇ ℝ} 
-(hg : ∀ i, g i ∈ closure₀ M₀) : I.sup g ∈ closure₀ M₀ := sorry
-
-lemma finset_inf_le {I : finset X} (g : X → X →ᵇ ℝ) :
-∀ i ∈ I, ∀ x : X, (I.inf g) x ≤ g i x := sorry
-
-lemma lt_finset_inf {I : finset X} {g : X → X →ᵇ ℝ} {x} {r} 
-(hlt : ∀ i ∈ I, r < g i x) : r < (I.inf g) x := sorry
-
-lemma finset_inf_mem_closure₀ {I : finset X} {g : X → X →ᵇ ℝ} 
-(hg : ∀ i, g i ∈ closure₀ M₀) : I.inf g ∈ closure₀ M₀ := sorry
-
-private lemma is_open_aux_set₀ {f : X →ᵇ ℝ} 
-{g : X → X →ᵇ ℝ} {ε : ℝ} (hε : ε > 0) : 
-∀ y : X, is_open {z : X | f z - (g y) z < ε} := sorry
-
-private lemma is_open_aux_set₁ {f : X →ᵇ ℝ} 
-{g : X → X →ᵇ ℝ} {ε : ℝ} (hε : ε > 0) : 
-∀ x : X, is_open {z : X | g x z < f z + ε} := sorry
-
 /- Given x ∈ X, we create a function thats greater than f(z) - ε at all z while 
-smaller than f(x) + ε.
--/
-lemma has_bcf_gt {f : X →ᵇ ℝ} (h : ∀ ε > 0, ∀ x y : X, ∃ (g : X →ᵇ ℝ) 
+smaller than f(x) + ε. -/
+lemma has_bcf_gt {M₀ : set (X →ᵇ ℝ)} {f : X →ᵇ ℝ} 
+(h : ∀ ε > 0, ∀ x y : X, ∃ (g : X →ᵇ ℝ) 
 (H : g ∈ closure₀ M₀), abs (f x - g x) < ε ∧ abs (f y - g y) < ε) : 
 ∀ ε > 0, ∀ x : X, ∃ (g : X →ᵇ ℝ) 
 (H : g ∈ closure₀ M₀), ∀ z : X, f z - ε < g z ∧ g x < f x + ε := 
@@ -195,7 +98,8 @@ begin
 end
 
 /- We again use the same method obtaining a function arbitarily close to f -/
-lemma has_bcf_close {f : X →ᵇ ℝ} (h : ∀ ε > 0, ∀ x y : X, ∃ (g : X →ᵇ ℝ) 
+lemma has_bcf_close {M₀ : set (X →ᵇ ℝ)} {f : X →ᵇ ℝ} 
+(h : ∀ ε > 0, ∀ x y : X, ∃ (g : X →ᵇ ℝ) 
 (H : g ∈ closure₀ M₀), abs (f x - g x) < ε ∧ abs (f y - g y) < ε) : 
 ∀ (ε : ℝ) (hε : 0 < ε), ∃ (g : X →ᵇ ℝ) 
 (H : g ∈ closure₀ M₀), ∀ z : X, abs (f z - g z) < ε := 
@@ -220,7 +124,7 @@ end
 
 /- With that we conclude that there is some sequence of functions in closure₀ M₀ 
 that is uniformly convergent towards f -/
-lemma in_closure₂_of_dense_at_points {f : X →ᵇ ℝ}
+lemma in_closure₂_of_dense_at_points {M₀ : set (X →ᵇ ℝ)} {f : X →ᵇ ℝ}
 (h : ∀ ε > 0, ∀ x y : X, ∃ (g : X →ᵇ ℝ) 
 (H : g ∈ closure₀ M₀), abs (f x - g x) < ε ∧ abs (f y - g y) < ε) : 
 f ∈ closure₂ M₀ := or.inr $
@@ -234,33 +138,22 @@ begin
   norm_cast, exact le_add_right hn,
 end
 
-/-
-Finally, we can conclude that f can be constructed from M₀ using inf, sup 
+/- Finally, we can conclude that f can be constructed from M₀ using inf, sup 
 and uniform convergence iff. for all pairs of points in X, (x, y), there is 
 some sequence of functions in M₀ that converges pointwise to f(x) and f(y) at 
-x and y.
--/
-theorem in_closure₂_iff_dense_at_points 
-{f : X →ᵇ ℝ} : f ∈ closure₂ M₀ ↔ ∀ ε > 0, ∀ x y : X,
+x and y. -/
+theorem in_closure₂_iff_dense_at_points {M₀ : set (X →ᵇ ℝ)} {f : X →ᵇ ℝ} : 
+f ∈ closure₂ M₀ ↔ ∀ ε > 0, ∀ x y : X, 
 ∃ (g : X →ᵇ ℝ) (H : g ∈ closure₀ M₀), abs (f x - g x) < ε ∧ abs (f y - g y) < ε := 
 ⟨λ h, dense_at_points_in_closure h, λ h, in_closure₂_of_dense_at_points h⟩
 
-/-
-From this, two corollaries can be deduced immediately:
+/- From this, a corollaries can be deduced immediately:
 
 - If ∀ x, y ∈ X, a, b ∈ ℝ, ∃ f ∈ M₀, f(x) = a, f(y) = b, then 
   closure₂ M₀ = M (= @univ X →ᵇ ℝ)
-where M is the set of all bounded continuous functions from X to ℝ.
+where M is the set of all bounded continuous functions from X to ℝ. -/
 
-- If f : ℕ → X →ᵇ ℝ is monotone and converges 
-pointwise to g, then f converges uniformly to g.
-
-The proof of the first corollary is trivial and the proof of the second 
-follows by letting M₀ := {f n | n ∈ ℕ}.
--/
-
-/-
-Due to reasons commented from above, we will now consider pairs of points in 
+/- Due to reasons commented from above, we will now consider pairs of points in 
 X rather than functions. 
 
 We define M₀' : X → X → ℝ × ℝ : x, y ↦ {(f(x), f(y)) | f ∈ M₀};
@@ -268,148 +161,16 @@ We define M₀' : X → X → ℝ × ℝ : x, y ↦ {(f(x), f(y)) | f ∈ M₀};
 and (α, β) ⊓ (γ, δ) := (min α γ, min β δ).
 
 We also define a closure with respect to this inf, sup and limits of 
-sequences in ℝ². 
--/
+sequences in ℝ². -/
 
-def boundary_points (M : set (X →ᵇ ℝ)) (x y : X) := 
-  {z | ∃ (f : X →ᵇ ℝ) (hf : f ∈ M), (f x, f y) = z}
-
-lemma boundary_points_of_univ : ∀ x y : X, boundary_points univ x y = univ := sorry
-
--- We do not need to define inf and sup for tuples since matlib has it!
--- try : #eval (1, 4) ⊔ (2, 3)
-
--- Limit of sequences in ℝ²
-def converges_to_R2 (s : ℕ → ℝ × ℝ) (x) := 
-  ∀ ε > 0, ∃ N : ℕ, ∀ n ≥ N, dist (s n) x < ε
-
-def closure' (S : set (ℝ × ℝ)) := 
-  {z | (∃ r t ∈ S, r ⊔ t = z ∨ r ⊓ t = z) ∨ 
-  ∃ (s : ℕ → ℝ × ℝ) (hs : ∀ n : ℕ, (s n) ∈ S), converges_to_R2 s z}
-
-attribute [reducible] boundary_points closure'
-
-lemma in_closure'_of_in_closoure₂ {f : X →ᵇ ℝ} (h : f ∈ closure₂ M₀) 
-(hc : closure₀ M₀ = M₀) : ∀ x y : X, (f x, f y) ∈ closure' (boundary_points M₀ x y) :=
+lemma le_closure' {S : set (ℝ × ℝ)} : S ⊆ closure' S :=
 begin
-  intros x y, right,
-  rw in_closure₂_iff_dense_at_points at h,
-  choose F hF₀ hF₁ using λ (n : ℕ), 
-    h (1 / (n + 1)) (nat.one_div_pos_of_nat) x y,
-  refine ⟨λ n, (F n x, F n y), λ n, ⟨F n, hc ▸ hF₀ n, rfl⟩, λ ε hε, _⟩, 
-  cases exists_nat_gt (1 / ε) with N hN,
-  refine ⟨N, λ n hn, _⟩,
-  suffices : abs (F n x - f x) < ε ∧ abs (F n y - f y) < ε,
-    unfold dist, simp [this],
-  split; rw abs_sub;
-    try { refine lt_of_lt_of_le (hF₁ n).1 _ <|> refine lt_of_lt_of_le (hF₁ n).2 _ };
-    refine one_div_le_of_one_div_le_of_pos hε (le_trans (le_of_lt hN) _);
-    norm_cast; exact le_add_right hn
+  intros x hx, left, refine ⟨x, x, hx, hx, or.inl _⟩, 
+  unfold has_sup.sup, 
+  unfold semilattice_sup.sup,
+  unfold lattice.sup,
+  simp
 end
-
-lemma bcf_pair_sup_eq_bcf_sup_pair {u v : X →ᵇ ℝ} {x y} : 
-(u x, u y) ⊔ (v x, v y) = ((u ⊔ v) x, (u ⊔ v) y) := rfl
-
-lemma bcf_pair_inf_eq_bcf_inf_pair {u v : X →ᵇ ℝ} {x y} : 
-(u x, u y) ⊓ (v x, v y) = ((u ⊓ v) x, (u ⊓ v) y) := rfl
-
-lemma in_closure₂_of_in_closure' {f : X →ᵇ ℝ} (hc : closure₀ M₀ = M₀)
-(h : ∀ x y : X, (f x, f y) ∈ closure' (boundary_points M₀ x y)) : f ∈ closure₂ M₀ :=
-begin
-  rw in_closure₂_iff_dense_at_points,
-  intros ε hε x y,
-  cases h x y with h' h',
-    { rcases h' with ⟨r, t, ⟨u, hu₀, hu₁⟩, ⟨v, hv₀, hv₁⟩, hrt⟩,
-      cases hrt, rw hc,
-        { refine ⟨u ⊔ v, (hc ▸ closure₀_closed_with_sup) hu₀ hv₀, _⟩,
-          rw [←hu₁, ←hv₁, bcf_pair_sup_eq_bcf_sup_pair] at hrt,
-          rw [(prod.mk.inj hrt).1, (prod.mk.inj hrt).2], simpa },
-        { refine ⟨u ⊓ v, closure₀_closed_with_inf _ _, _⟩;
-          try { rw hc, assumption }, 
-          rw [←hu₁, ←hv₁, bcf_pair_inf_eq_bcf_inf_pair] at hrt,
-          rw [(prod.mk.inj hrt).1, (prod.mk.inj hrt).2], simpa } },
-    { rcases h' with ⟨s, hs₀, hs₁⟩,
-      cases hs₁ ε hε with N hN, 
-      rcases hs₀ N with ⟨g, hg₀, hg₁⟩,
-      refine ⟨g, _, _⟩, rw hc, assumption,
-      have := hN N (le_refl N),
-      rw ←hg₁ at this, unfold dist at this, simp at this,
-      split; rw abs_sub; simp only [this] }
-end
-
-lemma in_closure₂_iff_in_closure' {f : X →ᵇ ℝ} (hc : closure₀ M₀ = M₀) : 
-f ∈ closure₂ M₀ ↔ ∀ x y : X, (f x, f y) ∈ closure' (boundary_points M₀ x y) :=
-⟨λ h, in_closure'_of_in_closoure₂ h hc, λ h, in_closure₂_of_in_closure' hc h⟩
-
-/- 
-With this, we can formulate the relation between M₀ and M₀'(x, y) formally, i.e.
-if M₀, M₁ ⊆ M, 
-  hM : M₀ = closure₂ M₀ and M₁ = closure₂ M₁
-  hb : ∀ x, y ∈ X, M₀*(x, y) = M₁*(x, y)
-then M₀ = M₁.
--/
-lemma boundary_points_eq_of_eq (M₀ M₁ : set (X →ᵇ ℝ)) (h : M₀ = M₁) : 
-∀ x y : X, boundary_points M₀ x y = boundary_points M₁ x y := 
-λ x y, by rw h
-
-lemma closure₀_eq_of_closure₂_eq {M₀ : set (X →ᵇ ℝ)} (h : closure₂ M₀ = M₀) :
-closure₀ M₀ = M₀ := sorry
-
-lemma eq_of_boundary_points_eq (M₀ M₁ : set (X →ᵇ ℝ))
-(h : ∀ x y : X, boundary_points M₀ x y = boundary_points M₁ x y)
-(hM₀ : M₀ = closure₂ M₀) (hM₁ : M₁ = closure₂ M₁) : M₀ = M₁ := 
-begin
-  ext f, split; intro hf;
-  { try {rw hM₀ <|> rw hM₁}, try {rw hM₀ at hf <|> rw hM₁ at hf},
-    try {
-      rw in_closure₂_iff_in_closure' (closure₀_eq_of_closure₂_eq hM₁.symm), 
-      rw in_closure₂_iff_in_closure' (closure₀_eq_of_closure₂_eq hM₀.symm) at hf},
-    try {
-      rw in_closure₂_iff_in_closure' (closure₀_eq_of_closure₂_eq hM₁.symm) at hf, 
-      rw in_closure₂_iff_in_closure' (closure₀_eq_of_closure₂_eq hM₀.symm)},
-    intros x y, try {rw ←h x y <|> rw h x y},
-    exact hf x y }
-end
-
-theorem eq_iff_boundary_points_eq (M₀ M₁ : set (X →ᵇ ℝ))
-(hM₀ : M₀ = closure₂ M₀) (hM₁ : M₁ = closure₂ M₁) : 
-M₀ = M₁ ↔ ∀ x y : X, boundary_points M₀ x y = boundary_points M₁ x y := 
-⟨λ h, boundary_points_eq_of_eq M₀ M₁ h, λ h, eq_of_boundary_points_eq M₀ M₁ h hM₀ hM₁⟩
-
-/-
-Now that we've reformulated the problem such that it considers points in ℝ² 
-rather than all bounded continuous functions, the question now becomes, 
-under what condition, is the boundary points of closure₂ M₀ equal to ℝ².
--/
-theorem func_dense_iff_boundary_points_dense (M₀ : set (X →ᵇ ℝ)) :
-closure₂ M₀ = univ ↔ ∀ x y, boundary_points (closure₂ M₀) x y = univ := 
-begin
-  have := eq_iff_boundary_points_eq (closure₂ M₀) univ
-    (closure₂_of_closure₂ M₀).symm (closure₂_of_univ).symm,
-  split, 
-    { intros h x y,
-      rw this at h, rw (h x y),
-      exact boundary_points_of_univ x y },
-    { intro h, rw this, intros x y, rw h x y, 
-      exact (boundary_points_of_univ x y).symm }
-end
-
-/- In ralgebra.lean we proved the following result: 
-
-  theorem subalgebra_of_R2 (S : subalgebra ℝ (ℝ × ℝ)) :
-  S.carrier = {(0, 0)} ∨
-  S.carrier = {p | ∃ x : ℝ, p = (x, 0)} ∨
-  S.carrier = {p | ∃ y : ℝ, p = (0, y)} ∨
-  S.carrier = {p | ∃ z : ℝ, p = (z, z)} ∨ 
-  S.carrier = univ
--/
-
-/-
-Okay, so what does Weierstrass-Stone actually say? 
-- Let M₀ be a subalgebra of (X →ᵇ ℝ) that's **closed** (M₂ = closure₀ M₀) 
-and has seperate points. Then either closure₂ M₀ = univ or ∃ x₀ ∈ X,
-closure₂ M₀ = {f : X →ᵇ ℝ | f(x₀) = 0}.
--/
 
 def has_seperate_points (M₀ : set (X →ᵇ ℝ)) :=
   ∀ x y : X, x ≠ y → ∃ (f : X →ᵇ ℝ) (hf : f ∈ M₀), f x ≠ f y
@@ -449,13 +210,6 @@ begin
   refl
 end
 
-lemma neg_inf_eq_sup {f g h : X →ᵇ ℝ} : f = g ⊔ h ↔ -f = -g ⊓ -h := sorry
-lemma neg_sup_eq_inf {f g h : X →ᵇ ℝ} : f = g ⊓ h ↔ -f = -g ⊔ -h := sorry
-
-lemma neg_unif_converges_to {f : X →ᵇ ℝ} {F : ℕ → (X →ᵇ ℝ)} 
-(hF : unif_converges_to (λ n, F n) f) : unif_converges_to (λ n, -F n) (-f) :=
-sorry
-
 /- neg_mem is a bit trickier since we need to show that closure₂ 
 is closed under neg (note that we are not assuming closure₂ M₀ is 
 a subalgebra). To prove this we construct an uniformly convergent sequence 
@@ -485,7 +239,7 @@ end
 /- It is a similar story for add_mem and mul_mem. These requires 
 - if λ n, F n ⟶ f and λ n, G n ⟶ g, then λ n, F n + G n ⟶ f + g
 - if λ n, F n ⟶ f and λ n, G n ⟶ g, then λ n, F n * G n ⟶ f * g
-respectively (both of which are standar results).
+respectively (both of which are standar results so).
 -/
 lemma add_mem_of_boundary_points {M₀' : subalgebra ℝ (X →ᵇ ℝ)} 
 {x y} (hc : closure₀ M₀'.carrier = M₀'.carrier) :
@@ -507,12 +261,6 @@ is_subring (boundary_points (closure₂ M₀'.carrier) x y) :=
   neg_mem := neg_mem_of_boundary_points hc,
   one_mem := one_mem_of_boundary_points hc,
   mul_mem := mul_mem_of_boundary_points hc }
-
-/- We now need to prove that (r, r) is in the boundary points.
-This is true since M₀' is a subalgebra ⇒ 1 ∈ M₀'.carrier and 
-∀ μ ∈ ℝ, ∀ f ∈ M₀'.carrier, μf ∈ M₀'.carrier ⇒ r • 1 ∈ M₀'.carrier -/
-lemma subalgebra_closed_under_smul' {M₀' : subalgebra ℝ (X →ᵇ ℝ)} :
-∀ (α : ℝ) {x}, x ∈ M₀'.carrier → α • x ∈ M₀'.carrier := sorry
 
 lemma boundary_points_range_le {M₀' : subalgebra ℝ (X →ᵇ ℝ)}
 {x y} (hc : closure₀ M₀'.carrier = M₀'.carrier) :  
@@ -536,6 +284,150 @@ def subalgebra_of_boundary_points {M₀' : subalgebra ℝ (X →ᵇ ℝ)}
   subring := is_subring_boundary_points hc,
   range_le' := boundary_points_range_le hc}
 
+lemma in_closure'_of_in_closoure₂ {M₀' : subalgebra ℝ (X →ᵇ ℝ)} {f : X →ᵇ ℝ} 
+(h : f ∈ closure₂ M₀'.carrier) (hc : closure₀ M₀'.carrier = M₀'.carrier) : 
+∀ x y : X, x ≠ y → (f x, f y) ∈ closure' (boundary_points M₀'.carrier x y) :=
+begin
+  intros x y hxy, right,
+  rw in_closure₂_iff_dense_at_points at h,
+  choose F hF₀ hF₁ using λ (n : ℕ), 
+    h (1 / (n + 1)) (nat.one_div_pos_of_nat) x y,
+  refine ⟨λ n, (F n x, F n y), λ n, ⟨F n, hc ▸ hF₀ n, rfl⟩, λ ε hε, _⟩, 
+  cases exists_nat_gt (1 / ε) with N hN,
+  refine ⟨N, λ n hn, _⟩,
+  suffices : abs (F n x - f x) < ε ∧ abs (F n y - f y) < ε,
+    unfold dist, simp [this],
+  split; rw abs_sub;
+    try { refine lt_of_lt_of_le (hF₁ n).1 _ <|> refine lt_of_lt_of_le (hF₁ n).2 _ };
+    refine one_div_le_of_one_div_le_of_pos hε (le_trans (le_of_lt hN) _);
+    norm_cast; exact le_add_right hn
+end
+
+lemma bcf_pair_sup_eq_bcf_sup_pair {u v : X →ᵇ ℝ} {x y} : 
+(u x, u y) ⊔ (v x, v y) = ((u ⊔ v) x, (u ⊔ v) y) := rfl
+
+lemma bcf_pair_inf_eq_bcf_inf_pair {u v : X →ᵇ ℝ} {x y} : 
+(u x, u y) ⊓ (v x, v y) = ((u ⊓ v) x, (u ⊓ v) y) := rfl
+
+lemma one_mapsto_one {x} : (1 : X →ᵇ ℝ) x = 1 := rfl
+
+lemma in_closure₂_of_in_closure' {M₀' : subalgebra ℝ (X →ᵇ ℝ)} {f : X →ᵇ ℝ} 
+(hc : closure₀ M₀'.carrier = M₀'.carrier) 
+(h : ∀ x y : X, x ≠ y → (f x, f y) ∈ closure' (boundary_points M₀'.carrier x y)) : 
+f ∈ closure₂ M₀'.carrier :=
+begin
+  rw in_closure₂_iff_dense_at_points,
+  intros ε hε x y,
+  cases em (x = y) with hxy hxy,
+  have : (f x, f x) ∈ closure' (boundary_points M₀'.carrier x y),
+    refine le_closure' ⟨(f x) • 1, _⟩,
+    refine ⟨subalgebra_closed_under_smul' (f x) one_mem_of_subalgebra, _⟩,
+    rw ←hxy, simp [one_mapsto_one],
+  cases this with h' h',
+    { rcases h' with ⟨r, t, ⟨u, hu₀, hu₁⟩, ⟨v, hv₀, hv₁⟩, hrt⟩,
+      cases hrt, rw hc,
+        { refine ⟨u ⊔ v, (hc ▸ closure₀_closed_with_sup) hu₀ hv₀, _⟩,
+          rw [←hu₁, ←hv₁, bcf_pair_sup_eq_bcf_sup_pair] at hrt,
+          rw [(prod.mk.inj hrt).1, (prod.mk.inj hrt).2, hxy], simpa },
+        { refine ⟨u ⊓ v, closure₀_closed_with_inf _ _, _⟩;
+          try { rw hc, assumption }, 
+          rw [←hu₁, ←hv₁, bcf_pair_inf_eq_bcf_inf_pair] at hrt,
+          rw [(prod.mk.inj hrt).1, (prod.mk.inj hrt).2, hxy], simpa } },
+    { rcases h' with ⟨s, hs₀, hs₁⟩,
+      cases hs₁ ε hε with N hN, 
+      rcases hs₀ N with ⟨g, hg₀, hg₁⟩,
+      refine ⟨g, _, _⟩, rw hc, assumption,
+      have := hN N (le_refl N),
+      rw ←hg₁ at this, unfold dist at this, simp at this,
+      split; rw [abs_sub]; simp only [this],
+      convert this.2, rwa hxy },
+  cases h x y hxy with h' h',
+    { rcases h' with ⟨r, t, ⟨u, hu₀, hu₁⟩, ⟨v, hv₀, hv₁⟩, hrt⟩,
+      cases hrt, rw hc,
+        { refine ⟨u ⊔ v, (hc ▸ closure₀_closed_with_sup) hu₀ hv₀, _⟩,
+          rw [←hu₁, ←hv₁, bcf_pair_sup_eq_bcf_sup_pair] at hrt,
+          rw [(prod.mk.inj hrt).1, (prod.mk.inj hrt).2], simpa },
+        { refine ⟨u ⊓ v, closure₀_closed_with_inf _ _, _⟩;
+          try { rw hc, assumption }, 
+          rw [←hu₁, ←hv₁, bcf_pair_inf_eq_bcf_inf_pair] at hrt,
+          rw [(prod.mk.inj hrt).1, (prod.mk.inj hrt).2], simpa } },
+    { rcases h' with ⟨s, hs₀, hs₁⟩,
+      cases hs₁ ε hε with N hN, 
+      rcases hs₀ N with ⟨g, hg₀, hg₁⟩,
+      refine ⟨g, _, _⟩, rw hc, assumption,
+      have := hN N (le_refl N),
+      rw ←hg₁ at this, unfold dist at this, simp at this,
+      split; rw abs_sub; simp only [this] }
+end
+
+lemma in_closure₂_iff_in_closure' {M₀' : subalgebra ℝ (X →ᵇ ℝ)} {f : X →ᵇ ℝ} 
+(hc : closure₀ M₀'.carrier = M₀'.carrier) : 
+f ∈ closure₂ M₀'.carrier ↔ 
+∀ x y : X, x ≠ y → (f x, f y) ∈ closure' (boundary_points M₀'.carrier x y) :=
+⟨λ h, in_closure'_of_in_closoure₂ h hc, λ h, in_closure₂_of_in_closure' hc h⟩
+
+/- With this, we can formulate the relation between M₀ and M₀'(x, y) formally, i.e.
+if M₀, M₁ ⊆ M, 
+  hM : M₀ = closure₂ M₀ and M₁ = closure₂ M₁
+  hb : ∀ x, y ∈ X, M₀*(x, y) = M₁*(x, y)
+then M₀ = M₁. -/
+lemma boundary_points_eq_of_eq (M₀' M₁' : subalgebra ℝ (X →ᵇ ℝ)) 
+(h : M₀'.carrier = M₁'.carrier) : 
+∀ x y : X, x ≠ y → boundary_points M₀'.carrier x y = boundary_points M₁'.carrier x y := 
+λ _ _ _, by rw h
+
+lemma closure₀_eq_of_closure₂_eq {M₀' : subalgebra ℝ (X →ᵇ ℝ)} 
+(h : closure₂ M₀'.carrier = M₀'.carrier) :
+closure₀ M₀'.carrier = M₀'.carrier := sorry
+
+lemma eq_of_boundary_points_eq (M₀' M₁' : subalgebra ℝ (X →ᵇ ℝ))
+(h : ∀ x y : X, x ≠ y → boundary_points M₀'.carrier x y = boundary_points M₁'.carrier x y)
+(hM₀ : M₀'.carrier = closure₂ M₀'.carrier) 
+(hM₁ : M₁'.carrier = closure₂ M₁'.carrier) : M₀'.carrier = M₁'.carrier := 
+begin
+  ext f, split; intro hf;
+  { try {rw hM₀ <|> rw hM₁}, try {rw hM₀ at hf <|> rw hM₁ at hf},
+    try { rw in_closure₂_iff_in_closure' (closure₀_eq_of_closure₂_eq hM₁.symm), 
+      rw in_closure₂_iff_in_closure' (closure₀_eq_of_closure₂_eq hM₀.symm) at hf },
+    try { rw in_closure₂_iff_in_closure' (closure₀_eq_of_closure₂_eq hM₁.symm) at hf, 
+      rw in_closure₂_iff_in_closure' (closure₀_eq_of_closure₂_eq hM₀.symm) },
+    intros x y hxy, try {rw ←h x y <|> rw h x y},
+    exact hf x y hxy, assumption }
+end
+
+theorem eq_iff_boundary_points_eq (M₀' M₁' : subalgebra ℝ (X →ᵇ ℝ))
+(hM₀ : M₀'.carrier = closure₂ M₀'.carrier) 
+(hM₁ : M₁'.carrier = closure₂ M₁'.carrier) : 
+M₀'.carrier = M₁'.carrier ↔ 
+∀ x y : X, x ≠ y → boundary_points M₀'.carrier x y = boundary_points M₁'.carrier x y := 
+⟨λ h, boundary_points_eq_of_eq _ _ h, λ h, eq_of_boundary_points_eq _ _ h hM₀ hM₁⟩
+
+lemma closure₂_subalgebra_carrier {M₀' : subalgebra ℝ (X →ᵇ ℝ)} : 
+(closure₂_subalgebra M₀').carrier = closure₂ M₀'.carrier := rfl
+
+lemma univ_subalgebra_carrier : 
+(univ_subalgebra.carrier : set (X →ᵇ ℝ)) = univ := rfl
+
+/- Now that we've reformulated the problem such that it considers points in ℝ² 
+rather than all bounded continuous functions, the question now becomes, 
+under what condition, is the boundary points of closure₂ M₀ equal to ℝ². -/
+theorem func_dense_iff_boundary_points_dense (M₀' : subalgebra ℝ (X →ᵇ ℝ)) :
+closure₂ M₀'.carrier = univ ↔ 
+∀ x y, x ≠ y → boundary_points (closure₂ M₀'.carrier) x y = univ := 
+begin
+  have := eq_iff_boundary_points_eq (closure₂_subalgebra M₀') univ_subalgebra
+    (closure₂_of_closure₂ M₀'.carrier).symm (closure₂_of_univ).symm,
+  rw [closure₂_subalgebra_carrier, univ_subalgebra_carrier] at this,
+  split, 
+    { intros h x y hxy,
+      rw this at h, rw (h x y),
+      exact boundary_points_of_univ x y,
+      assumption },
+    { intro h, rw this, intros x y hxy, rw h x y, 
+      exact (boundary_points_of_univ x y).symm,
+      assumption }
+end
+
 /- Now that we have proved that given a closed subalgebra of X →ᵇ ℝ over 
 ℝ - M₀', boundary_points (closure₂ M₀'.carrier) x y form a subalgebra of 
 ℝ², we can use this fact in combination of our theorem from ralgebra.lean 
@@ -544,8 +436,11 @@ concluding boundary_points (closure₂ M₀'.carrier) x y must be
   {p | ∃ y : ℝ, p = (0, y)} ∨ {p | ∃ z : ℝ, p = (z, z)} ∨ ℝ²
 Now due to `one_mem_of_boundary_points`, we eliminate our possiblities to 
 {p | ∃ z : ℝ, p = (z, z)} ∨ ℝ², the first of which is not possible if 
-we have seperate points.
--/
+we have seperate points. -/
+
+/- (Weierstrass-Stone's Theorem)
+Let M₀ be a subalgebra of (X →ᵇ ℝ) that's closed (M₂ = closure₀ M₀) 
+and has seperate points. Then closure₂ M₀ = univ. -/
 theorem weierstrass_stone {M₀' : subalgebra ℝ (X →ᵇ ℝ)} 
 (hc   : closure₀ M₀'.carrier = M₀'.carrier) 
 (hsep : has_seperate_points M₀'.carrier) 
@@ -553,7 +448,7 @@ theorem weierstrass_stone {M₀' : subalgebra ℝ (X →ᵇ ℝ)}
 closure₂ M₀'.carrier = univ :=
 begin
   rw func_dense_iff_boundary_points_dense,
-  intros x y,
+  intros x y hxy,
   cases subalgebra_of_R2 (subalgebra_of_boundary_points x y hc),
     { suffices : ((1, 1) : ℝ × ℝ) ∈ (subalgebra_of_boundary_points x y hc).carrier,
         exfalso, rw [h, mem_singleton_iff] at this, 
@@ -570,6 +465,11 @@ begin
         simp at hr, assumption,
       exact one_mem_of_boundary_points hc },
   cases h,
-    { sorry },
+    { rcases hsep x y hxy with ⟨f, hf₀, hf₁⟩,
+      suffices : ((f x, f y) : ℝ × ℝ) ∈ (subalgebra_of_boundary_points x y hc).carrier,
+        exfalso, rw h at this, cases this with r hr,
+        apply hf₁, replace this : f x = r := congr_arg prod.fst hr,
+        rw this, simp [show f y = r, by exact congr_arg prod.snd hr],
+      refine ⟨f, _, rfl⟩, apply closure_le_seq₁, rwa hc },
     { exact h }
 end
