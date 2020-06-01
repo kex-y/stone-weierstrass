@@ -1,0 +1,441 @@
+\documentclass[landscape,final,a0paper]{baposter}
+
+
+\tracingstats=2
+
+\usepackage{calc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{relsize}
+\usepackage{multirow}
+\usepackage{bm}
+
+\usepackage{graphicx}
+\usepackage{multicol}
+
+\usepackage{pgfbaselayers}
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{palatino}
+\usepackage{hyperref}
+\usepackage[utf8x]{inputenc}
+\usepackage{amssymb, upgreek}
+
+\usepackage{color}
+\definecolor{keywordcolor}{rgb}{0.7, 0.1, 0.1}   % red
+\definecolor{commentcolor}{rgb}{0.4, 0.4, 0.4}   % grey
+\definecolor{symbolcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{sortcolor}{rgb}{0.1, 0.5, 0.1}      % green
+\definecolor{errorcolor}{rgb}{1, 0, 0}           % bright red
+\definecolor{stringcolor}{rgb}{0.5, 0.3, 0.2}    % brown
+
+\usepackage{listings}
+\def\lstlanguagefiles{lstlean.tex}
+\lstset{language=lean}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\urlstyle{same}
+\DeclareUrlCommand\url{\color{magenta}\def\UrlLeft{http://}\urlstyle{tt}}
+
+\newcommand{\captionfont}{\footnotesize}
+
+\selectcolormodel{cmyk}
+
+%\graphicspath{{images/}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Some math symbols used in the text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Format 
+
+\renewcommand{\Pr}{\mbox{P}}
+\newcommand{\e}{\mbox{e}}
+\newcommand{\dx}{\,\mbox{d}x}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Multicol Settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\columnsep}{0.7em}
+\setlength{\columnseprule}{0mm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Save space in lists. Use this after the opening of the list
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\compresslist}{%
+\setlength{\itemsep}{1pt}%
+\setlength{\parskip}{0pt}%
+\setlength{\parsep}{0pt}%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Begin of Document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Here starts the poster
+%%%---------------------------------------------------------------------------
+%%% Format it to your taste with the options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define some colors
+\definecolor{silver}{cmyk}{0,0,0,0.3}
+\definecolor{yellow}{cmyk}{0,0,0.9,0.0}
+\definecolor{reddishyellow}{cmyk}{0,0.22,1.0,0.0}
+\definecolor{black}{cmyk}{0,0,0.0,1.0}
+\definecolor{darkYellow}{cmyk}{0,0,1.0,0.5}
+\definecolor{darkSilver}{cmyk}{0,0,0,0.1}
+\definecolor{lightyellow}{cmyk}{0,0,0.3,0.0}
+\definecolor{lighteryellow}{cmyk}{0,0,0.1,0.0}
+\definecolor{lighteryellow}{cmyk}{0,0,0.1,0.0}
+\definecolor{lightestyellow}{cmyk}{0,0,0.05,0.0}
+\definecolor{cyan}{cmyk}{1,0,0,0}
+\definecolor{lightcyan}{cmyk}{0.5,0,0,0}
+\definecolor{pastelcyan}{cmyk}{0.25,0,0,0}
+\definecolor{magenta}{cmyk}{0,1,0,0}
+\definecolor{yellow}{cmyk}{0,0,1,0}
+\definecolor{lightyellow}{cmyk}{0,0,0.5,0}
+\definecolor{pastelyellow}{cmyk}{0,0,0.25,0}
+\definecolor{black}{cmyk}{0,0,0,1}
+\definecolor{darkgray}{cmyk}{0,0,0,0.75}
+\definecolor{gray}{cmyk}{0,0,0,0.5}
+\definecolor{lightgray}{cmyk}{0,0,0,0.25}
+\definecolor{white}{cmyk}{0,0,0,0}
+\definecolor{red}{cmyk}{0,1,1,0}
+\definecolor{orange}{cmyk}{0,0.5,1,0}
+\definecolor{scarlet}{cmyk}{0,1,0.5,0}
+\definecolor{brown}{cmyk}{0.5,0.75,1,0}
+\definecolor{camel}{cmyk}{0.25,0.375,0.5,0}
+\definecolor{cream}{cmyk}{0,0.2,0.3,0}
+\definecolor{green}{cmyk}{1,0,1,0}
+\definecolor{lightgreen}{cmyk}{0.5,0,0.5,0}
+\definecolor{pastelgreen}{cmyk}{0.25,0,0.25,0}
+\definecolor{mossgreen}{cmyk}{0.64,0.4,1,0}
+\definecolor{yellowgreen}{cmyk}{0.5,0,1,0}
+\definecolor{skyblue}{cmyk}{0.4,0.16,0,0}
+\definecolor{royal}{cmyk}{1.0,0.5,0,0}
+\definecolor{navyblue}{cmyk}{0.9,0.75,0.5,0}
+\definecolor{lightnavy}{cmyk}{0.4,0.3,0.2,0}
+\definecolor{blue}{cmyk}{1,1,0,0}
+\definecolor{lightblue}{cmyk}{0.5,0.5,0,0}
+\definecolor{pastelblue}{cmyk}{0.25,0.25,0,0}
+\definecolor{lightpastelblue}{cmyk}{0.15,0.15,0,0}
+\definecolor{lightestpastelblue}{cmyk}{0.05,0.05,0,0}
+\definecolor{lavender}{cmyk}{0.25,0.25,0,0}
+\definecolor{violet}{cmyk}{0.75,1,0.25,0}
+\definecolor{purple}{cmyk}{0.5,1,0.5,0}
+\definecolor{lightpurple}{cmyk}{0.25,0.5,0.25,0}
+\definecolor{pink}{cmyk}{0,0.5,0,0}
+
+
+%%
+
+\typeout{Poster Starts}
+%\background{
+  %\begin{tikzpicture}[remember picture,overlay]%
+  %  \draw (current page.north west)+(-2em,-2em) node[anchor=north west] %{\hspace{-2em}\includegraphics[height=1.1\textheight]{silhouettes_background}};
+ % \end{tikzpicture}%
+%}
+
+
+
+
+\newlength{\leftimgwidth}
+\begin{poster}%
+  % Poster Options, such as colours etc
+  {
+  % Show grid to help with alignment
+  grid=false,
+ % Column spacing
+  colspacing=0.5em,
+ % Color style
+ % bgColorOne=pastelblue,
+ %bgColorTwo=lightpastelblue,
+  bgColorOne=white,
+  bgColorTwo=white,
+  borderColor=navyblue,
+  headerColorOne=lightnavy,
+  headerColorTwo=purple,
+  headerFontColor=black,
+ % boxColorOne=lightpastelblue,
+ % boxColorTwo=lightestpastelblue,
+ boxColorOne=white,
+ boxColorTwo=white,
+ % Format of textbox
+  textborder=roundedleft,
+% textborder=rectangle,
+% Format of text header
+  eyecatcher=false,
+  headerborder=open,
+  headerheight=0.08\textheight,
+  headershape=roundedright,
+  headershade=plain,
+  headerfont=\Large\textsf, %Sans Serif
+  boxshade=plain,
+%  background=shade-tb,
+ % background=plain,
+  background=none,
+  linewidth=2pt
+  }
+  % Eye Catcher
+  {} % select eyecatcher=false above if not required. If no eye catcher is present, the title is left aligned.
+  % Title
+  {\sf %Sans Serif
+  %\bf% Serif
+  The Stone-Weierstrass Theorem and its Formalisation}
+  % Authors
+  {
+  Kexing Ying
+  }
+  % University logo
+  { % The makebox allows the title to flow into the logo
+    \makebox[8em][r]{%
+        \begin{minipage}{16em}
+				\hfill \includegraphics[height=3em]{imperial.pdf}
+				\end{minipage}
+      
+    }
+  }
+
+  \tikzstyle{light shaded}=[top color=baposterBGtwo!30!white,bottom color=baposterBGone!30!white,shading=axis,shading angle=30]
+
+  % Width of left inset image
+     \setlength{\leftimgwidth}{0.78em+8.0em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Now define the boxes that make up the poster
+%%%---------------------------------------------------------------------------
+%%% Each box has a name and can be placed absolutely or relatively.
+%%% The only inconvenience is that you can only specify a relative position 
+%%% towards an already declared box. So if you have a box attached to the 
+%%% bottom, one to the top and a third one which should be in between, you 
+%%% have to specify the top and bottom boxes before you specify the middle 
+%%% box.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % A coloured circle useful as a bullet with an adjustably strong filling
+\newcommand{\colouredcircle}[1]{%
+      \tikz{\useasboundingbox (-0.2em,-0.32em) rectangle(0.2em,0.32em); \draw[draw=black,fill=baposterBGone!80!black!#1!white,line width=0.03em] (0,0) circle(0.18em);}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Notations and Variables}{name=notations,column=0,row = 0}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Throughout this poster, we will let $X$ be a compact metric space, $M$ to be the set of all 
+bounded and continuous functions from $X$ to $\mathbb{R}$, $M_0$ a subset of $M$, 
+$\bar{M_0}$ the closure of $M_0$ under lattice operations and uniform convergence to 
+the limit and unless otherwise specified, we let all functions from $X$ to $\mathbb{R}$ 
+be bounded and continuous.
+
+\vspace{3mm}
+We say $M_0$ \textit{separates points} if and only if for all distinct $x, y \in X$, there 
+exists some $f \in M_0$ such that $f(x) \neq f(y)$.
+
+  \vspace{0.3em}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Lattice Operations}{name=lattice,column=0,below=notations}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+While we do not form a complete lattice on the set of bounded continuous functions, 
+we define two lattice operations \(\vee, \wedge : (X \to \mathbb{R})^2\to (X \to \mathbb{R}) \) 
+such that, for all \(f, g : X \to \mathbb{R}\), where \(f, g\) are bounded continuous functions 
+$$
+f \vee g = \max\{f, g\},
+$$
+and 
+$$
+f \wedge g = \min \{f, g\}.
+$$
+
+  \vspace{0.3em}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{$R$-algebra and Subalgebra}{name=algebra,column=0,below=lattice}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+While in many literature (cite) algebras over a field are used to examine the 
+Stone-Weierstrass theorem, it is in fact not necessary to examine algebras over field. 
+As we will demonstrate, algebras over a commutative ring (or $R$-algebras) will suffice.
+
+\vspace{3mm}
+An \textit{$R$-algebra} is a mathematical object consisting of a commutative ring $R$ and a 
+semi-ring $A$ such that there exists scalar multiplication \(\cdot : R \times A \to A\) 
+and a homomorphism from $R$ to $A$, \(\phi : R \to A\) such that 
+$$
+r \cdot a = \phi(r) \times a,
+$$
+and 
+$$
+\phi(r) \times a = a \times \phi(r)
+$$
+are satisfied for all $r \in R$ and $a \in A$ (cite).
+
+\vspace{3mm}
+A \textit{subalgebra} $S$ of an $R$-algebra $A$ is a subset of $A$ that's closed under the induced operations 
+carried from $A$. 
+
+\vspace{3mm}
+It can be shown that both $M$ and $\mathbb{R}^2$ form a $R$-algebra over $\mathbb{R}$ (cite my own proof?).
+
+  \vspace{0.3em}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{The Stone-Weierstrass Theorem}{name=stone,column=1,span=1, row=0}{
+\textit{The Stone-Weierstrass theorem} states that, given a subalgebra of $M$, $M_0$ that is 
+closed under lattice operations and separates points, $\bar{M_0} = M$, and we say $M_0$ is dense in $M$.
+
+ }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Outline of the proof}{name=outline,column=1,span=1,below=stone}{
+The theorem relies on two crucial lemmas:
+
+\vspace{2mm}
+{\bf Lemma 1.} For all $f \in M$, $f \in \bar{M_0}$ if and only if for all $x, y \in X$, $\epsilon > 0$, there 
+exists $g \in M_0$ such that $\left| f(x) - g(x) \right| < \epsilon$ and $\left| f(y) - g(y) \right| < \epsilon$, i.e. 
+there $M_0$ has a function arbitrarily close to $f$ at $x$ and $y$.
+
+\vspace{2mm}
+{\bf Lemma 2.} Given $S$, a subalgebra of $\mathbb{R}^2$, $S$ must be $\{(0,0)\}$, 
+$\{(x, 0) \mid x \in \mathbb{R} \}$,
+$\{(0. y) \mid y \in \mathbb{R} \}$, 
+$\{(z, z) \mid z \in \mathbb{R} \}$, or
+$\mathbb{R}^2$ itself.
+
+\vspace{3mm}
+By considering \textit{lemma 1}, it can be deduced that, for $M_0$, $M_1$, closed subalgebras of $M$ under lattice 
+operations and uniform convergence to the limit, $M_0 = M_1$ if and only if at for all distinct $x$, $y$, $M_0$ 
+and $M_1$ have the same boundary points (the boundary points of $M_i$ at $x$ $y$ is defined to be $\{(f(x), f(y)) \mid f \in M_i \}$).
+
+\vspace{2mm}
+Now by considering the fact that the boundary points of $M_0$ form a subalgebra of $\mathbb{R}^2$, we can utilise \textit{lemma 2} to 
+deduce that the boundary points must either be $\{(z, z) \mid z \in \mathbb{R} \}$, or $\mathbb{R}^2$ (the first three possibilities 
+in lemma 2 are not possible since $(1, 1)$ is in the boundary points). Now, if $M_0$ separates points then there must exist 
+$f \in M_0$, $f(x) \neq f(y)$ so that excludes $\{(z, z) \mid z \in \mathbb{R} \}$ and hence the boundary points is $\mathbb{R}^2$ and
+the theorem follows.
+
+  \vspace{0.5em}
+  }
+  
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Formalisation}{name=form,column=2,span=2,row=0}{
+
+\begin{minipage}[t]{0.475\textwidth}
+The procedure in which the formalisation was achieved is similar to the outline, the source code of which can be found in my GitHub repository:\\
+\url{github.com/JasonKYi/weierstrass_approximation}
+
+\vspace{2mm}
+\textit{Lemma 1} was formalised and is represented in Lean as 
+$\tt{in\_closure₂\_iff\_dense\_at\_points}$ in $\tt{main.lean}$ the method 
+of which we will discuss below. The forward direction of the proof is trivial so let us consider the reverse. 
+
+\vspace{2mm}
+Let us fix $x$ and $\epsilon$ and define a mapping to set of $X$
+$$S : X \to \texttt{set} \hspace{1mm} X := \lambda y, \{z | f(z) - g_y(z) < \epsilon \},$$
+where $g_y$ was chosen such that $\left| f(x) - g_y(x) \right| < \epsilon$ and $\left| f(y) - g_y(y) \right| < \epsilon$.
+
+Then for all $y \in X$, $y \in S(y)$ so $\bigcup_{y\in X} S(y) = X$. But as $X$ is compact, $\bigcup_{y\in X} S(y)$ admits a finite subcover (cite); 
+so, there exists a finite index set $I$ such that $\bigcup_{i\in I} S(y_i) = X$. Thus, by letting $p_x = \bigvee_{i \in I} g_{y_i}$, we have constructed 
+a function $p_x \in  \bar{M_0}$ such that 
+$$
+p_x(z) \ge g_{y_i}(z) > f(z) - \epsilon
+$$
+for all $z \in X$ and $i \in I$	.
+
+Now, by defining a similar mapping to set of $X$, 
+$$T : X \to \texttt{set} \hspace{1mm} X := \lambda x, \{z | p_x(z) < f(z) + \epsilon \},$$
+we again create a finite subcover of $X$ and thus can create the required function with $\bigwedge_{j \in J}p_{x_j}$ where $J$ 
+is the index set such that $\bigcup_{j\in J} T(p_{x_i}) = X$.
+\end{minipage}
+\begin{minipage}[t]{0.05\textwidth}
+\hspace{0mm}
+\end{minipage}
+\begin{minipage}[t]{0.46\textwidth}
+
+\textit{Lemma 2} was also formalised and is represented in Lean as $\tt{subalgebra\_of\_R2}$ and can be found in $\tt{ralgebra.lean}$.
+The proof this lemma is rather tedious and follows directly by evoking the law of the excluded middle on different propositions 
+multiple times.
+
+\vspace{3mm}
+Thus, with both lemma 1 and lemma 2 in our arsenal, it was shown that given two subalgebra of $M$, $M_0$ and $M_1$ which are 
+closed under lattice operations, $M_0 = M_1$ if and only if they have the same boundary points with $\tt{eq\_iff\_boundary\_points\_eq}$ 
+by constructing the notion of $\tt{closure'}$ in $\tt{definitions.lean}$ for sets of points in $\mathbb{R}^2$.
+
+\vspace{3mm}
+With that, by defining the notion of $\tt{has\_seperate\_points}$ in $\tt{definitions.lean}$ the Stone-Weierstrass theorem was proved with 
+the method described in the outline with theorem statement in Lean being \\ 
+
+\lstinline{theorem weierstrass_stone \{M₀' : subalgebra ℝ (X → ℝ)\} 
+(hc   : closure₀ M₀'.carrier = M₀'.carrier)
+(hsep : has_seperate_points M₀'.carrier) :
+closure₂ M₀'.carrier = univ}
+
+\vspace{3mm}
+with the $\tt{M₀'.carrier}$ notation referring to the underlying subset of $\tt{M₀'}$ the subalgebra and $\tt{hc}$ indicating $\tt{M₀'.carrier}$ 
+is closed under lattice operations.
+
+\end{minipage}
+
+\vspace{0.2em}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Approximation Theorem}{name=approx,column=1,span=2,below=form}{
+
+  \vspace{0.2em}
+  }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Conclusions}{name=concl,column=3,below=form}{
+
+	}
+	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{References}{name=references,column=3,above=bottom}{
+    \smaller
+    \vspace{-0.4em}
+    \bibliographystyle{plain}
+    \renewcommand{\section}[2]{\vskip 0.05em}
+      \begin{thebibliography}{1}\itemsep=-0.01em
+      \setlength{\baselineskip}{0.4em}
+      \bibitem{stir}
+        D. Stirzaker.
+        \newblock Elementary Probability. 
+        \newblock Cambridge University Press, 2003.
+      \bibitem{ross}
+        S. Ross.
+        \newblock A First Course in Probability.
+        \newblock Prentice Hall, 2001.
+				\bibitem{grimmett}
+				G. Grimmett. 
+				\newblock Probability and Random Processes.
+				\newblock Oxford University Press, 2001.
+      \end{thebibliography}
+  }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
+\end{poster}
+
+\end{document}
