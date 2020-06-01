@@ -172,9 +172,6 @@ begin
   simp
 end
 
-def has_seperate_points (M₀ : set (X →ᵇ ℝ)) :=
-  ∀ x y : X, x ≠ y → ∃ (f : X →ᵇ ℝ) (hf : f ∈ M₀), f x ≠ f y
-
 lemma zero_mem_of_subalgebra {M₀' : subalgebra ℝ (X →ᵇ ℝ)} :
 (0 : X →ᵇ ℝ) ∈ M₀'.carrier := M₀'.2.1.1.1
 
@@ -402,15 +399,15 @@ M₀'.carrier = M₁'.carrier ↔
 ∀ x y : X, x ≠ y → boundary_points M₀'.carrier x y = boundary_points M₁'.carrier x y := 
 ⟨λ h, boundary_points_eq_of_eq _ _ h, λ h, eq_of_boundary_points_eq _ _ h hM₀ hM₁⟩
 
+/- Now that we've reformulated the problem such that it considers points in ℝ² 
+rather than all bounded continuous functions, the question now becomes, 
+under what condition, is the boundary points of closure₂ M₀ equal to ℝ². -/
 lemma closure₂_subalgebra_carrier {M₀' : subalgebra ℝ (X →ᵇ ℝ)} : 
 (closure₂_subalgebra M₀').carrier = closure₂ M₀'.carrier := rfl
 
 lemma univ_subalgebra_carrier : 
 (univ_subalgebra.carrier : set (X →ᵇ ℝ)) = univ := rfl
 
-/- Now that we've reformulated the problem such that it considers points in ℝ² 
-rather than all bounded continuous functions, the question now becomes, 
-under what condition, is the boundary points of closure₂ M₀ equal to ℝ². -/
 theorem func_dense_iff_boundary_points_dense (M₀' : subalgebra ℝ (X →ᵇ ℝ)) :
 closure₂ M₀'.carrier = univ ↔ 
 ∀ x y, x ≠ y → boundary_points (closure₂ M₀'.carrier) x y = univ := 
@@ -440,7 +437,7 @@ we have seperate points. -/
 
 /- (Weierstrass-Stone's Theorem)
 Let M₀ be a subalgebra of (X →ᵇ ℝ) that's closed (M₂ = closure₀ M₀) 
-and has seperate points. Then closure₂ M₀ = univ. -/
+and seperate points. Then closure₂ M₀ = univ. -/
 theorem weierstrass_stone {M₀' : subalgebra ℝ (X →ᵇ ℝ)} 
 (hc   : closure₀ M₀'.carrier = M₀'.carrier) 
 (hsep : has_seperate_points M₀'.carrier) 

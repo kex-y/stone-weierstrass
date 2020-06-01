@@ -67,4 +67,7 @@ def closure' (S : set (ℝ × ℝ)) :=
   {z | (∃ r t ∈ S, r ⊔ t = z ∨ r ⊓ t = z) ∨ 
   ∃ (s : ℕ → ℝ × ℝ) (hs : ∀ n : ℕ, (s n) ∈ S), converges_to_R2 s z}
 
+def has_seperate_points (M₀ : set (X →ᵇ ℝ)) :=
+  ∀ x y : X, x ≠ y → ∃ (f : X →ᵇ ℝ) (hf : f ∈ M₀), f x ≠ f y
+
 attribute [reducible] closure₀ closure₂ boundary_points closure'
