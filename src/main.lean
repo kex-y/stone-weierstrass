@@ -440,8 +440,7 @@ Let M₀ be a subalgebra of (X →ᵇ ℝ) that's closed (M₂ = closure₀ M₀
 and seperate points. Then closure₂ M₀ = univ. -/
 theorem weierstrass_stone {M₀' : subalgebra ℝ (X →ᵇ ℝ)} 
 (hc   : closure₀ M₀'.carrier = M₀'.carrier) 
-(hsep : has_seperate_points M₀'.carrier) 
-(hns  : ∃ β γ : X, β ≠ γ):
+(hsep : has_seperate_points M₀'.carrier) :
 closure₂ M₀'.carrier = univ :=
 begin
   rw func_dense_iff_boundary_points_dense,
