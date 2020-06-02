@@ -22,7 +22,6 @@
 \usepackage{times}
 \usepackage{helvet}
 \usepackage{palatino}
-\usepackage{hyperref}
 \usepackage[utf8x]{inputenc}
 \usepackage{amssymb, upgreek}
 
@@ -38,14 +37,8 @@
 \def\lstlanguagefiles{lstlean.tex}
 \lstset{language=lean}
 
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-}
+\usepackage[hyphens]{url}
 
-\urlstyle{same}
 \DeclareUrlCommand\url{\color{magenta}\def\UrlLeft{http://}\urlstyle{tt}}
 
 \newcommand{\captionfont}{\footnotesize}
@@ -341,7 +334,7 @@ the theorem follows.
 
 \begin{minipage}[t]{0.475\textwidth}
 The procedure in which the formalisation was achieved is similar to the outline, the source code of which can be found in my GitHub repository:\\
-\url{github.com/JasonKYi/weierstrass_approximation}
+\url{github.com/JasonKYi/stone-weierstrass}
 
 \vspace{2mm}
 \textit{Lemma 1} was formalised and is represented in Lean as 
