@@ -23,4 +23,10 @@
 *.mtc
 *.mtc1
 *.out
+*.fdb_latexmk
 *.synctex.gz
+docs/poster/M1RposterL.log
+docs/poster/M1RposterL.synctex.gz
+docs/poster/M1RposterL.log
+docs/poster/M1RposterL.fls
+docs/poster/M1RposterL.aux
