@@ -231,10 +231,9 @@
 Throughout this poster, we will let $X$ be a compact metric space, $M$ to be the set of all 
 bounded and continuous functions from $X$ to $\mathbb{R}$, $M_0$ a subset of $M$, 
 $\bar{M_0}$ the closure of $M_0$ under lattice operations and uniform convergence to 
-the limit and unless otherwise specified, we let all functions from $X$ to $\mathbb{R}$ 
-be bounded and continuous.
+the limit and unless otherwise specified $X \to \mathbb{R}$ is set of all bounded and continuous functions.
 
-\vspace{3mm}
+\vspace{2.5mm}
 We say $M_0$ \textit{separates points} if and only if for all distinct $x, y \in X$, there 
 exists some $f \in M_0$ such that $f(x) \neq f(y)$.
 
@@ -384,8 +383,9 @@ the method described in the outline with theorem statement in Lean being \\
 closure₂ M₀'.carrier = univ}
 
 \vspace{3mm}
-with the $\tt{M₀'.carrier}$ notation referring to the underlying subset of $\tt{M₀'}$ the subalgebra and $\tt{hc}$ the hypothesis that 
-$\tt{M₀'.carrier}$ is closed under lattice operations.
+with the $\tt{M₀'.carrier}$ referring to the underlying subset of $\tt{M₀'}$ the subalgebra, $\tt{hc}$ the hypothesis that 
+$\tt{M₀'.carrier}$ is closed under lattice operations and $\tt{closure_2 M₀'.carrier}$ the closure of $\tt{M₀'.carrier}$ under uniform 
+convergence.
 
 \end{minipage}
 
