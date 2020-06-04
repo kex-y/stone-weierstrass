@@ -224,18 +224,24 @@
 \newcommand{\colouredcircle}[1]{%
       \tikz{\useasboundingbox (-0.2em,-0.32em) rectangle(0.2em,0.32em); \draw[draw=black,fill=baposterBGone!80!black!#1!white,line width=0.03em] (0,0) circle(0.18em);}}
 
+  \headerbox{The Stone-Weierstrass Theorem}{name=stone,column=0,span=1, row=0}{
+\textit{The Stone-Weierstrass theorem} states that, given an unital subalgebra of $M$, $M_0$ that is 
+closed under lattice operations and separates points, $\bar{M_0} = M$, and we say $M_0$ is dense in $M$ \cite{gaddy}.
+
+ }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Variables and Definitions}{name=notations,column=0,row = 0}{
+  \headerbox{Variables and Definitions}{name=notations,column=0,below=stone}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Throughout this poster, we will let $X$ be a compact metric space, $M$ to be the set of all 
-bounded and continuous functions from $X$ to $\mathbb{R}$, $M_0$ a subset of $M$, 
-$\bar{M_0}$ the closure of $M_0$ under lattice operations and uniform convergence to 
-the limit and unless otherwise specified $X \to \mathbb{R}$ is set of all bounded and continuous functions.
+bounded and continuous functions from $X$ to $\mathbb{R}$, $M_0$ a subset of $M$ and 
+$\bar{M_0}$ the closure of $M_0$ \textit{under uniform convergence to the limit}.
 
 \vspace{2.5mm}
 We say $M_0$ \textit{separates points} if and only if for all distinct $x, y \in X$, there 
 exists some $f \in M_0$ such that $f(x) \neq f(y)$.
+
+Given $x, y \in X$, the boundary points of $M_0$ is defined to be $\{(f(x), f(y)) \mid f \in M_0 \}$.
 
   \vspace{0.3em}
   }
@@ -243,8 +249,7 @@ exists some $f \in M_0$ such that $f(x) \neq f(y)$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \headerbox{Lattice Operations}{name=lattice,column=0,below=notations}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-While we do not form a complete lattice on the set of bounded continuous functions, 
-we define two lattice operations \(\vee, \wedge : (X \to \mathbb{R})^2\to (X \to \mathbb{R}) \) 
+We define two lattice operations \(\vee, \wedge : (X \to \mathbb{R})^2\to (X \to \mathbb{R}) \) 
 such that, for all \(f, g : X \to \mathbb{R}\), where \(f, g\) are bounded continuous functions 
 $$
 f \vee g = \max\{f, g\},
@@ -260,11 +265,6 @@ $$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \headerbox{$R$-algebra and Subalgebra}{name=algebra,column=0,below=lattice}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-While in many literature algebras over a field are used to examine the 
-Stone-Weierstrass theorem \cite{gaddy}, it is in fact not necessary to examine algebras over field. 
-As we will demonstrate, algebras over a commutative ring (or $R$-algebras) will suffice.
-
-\vspace{3mm}
 An \textit{$R$-algebra} is a mathematical object consisting of a commutative ring $R$ and a 
 semi-ring $A$ such that there exists scalar multiplication \(\cdot : R \times A \to A\) 
 and a homomorphism from $R$ to $A$, \(\phi : R \to A\) such that 
@@ -273,73 +273,85 @@ r \cdot a = \phi(r) \times a,
 $$
 and 
 $$
-\phi(r) \times a = a \times \phi(r)
+\phi(r) \times a = a \times \phi(r),
 $$
 are satisfied for all $r \in R$ and $a \in A$ \cite{lau}.
 
 \vspace{3mm}
-A \textit{subalgebra} $S$ of an $R$-algebra $A$ is a subset of $A$ that's closed under the induced operations 
-carried from $A$ \cite{borb}. 
+A \textit{unital subalgebra} $S$ of an $R$-algebra $A$ is a subset of $A$ that's closed under the induced operations 
+carried from $A$ and contains 1 \cite{borb}. 
 
 \vspace{3mm}
-It was shown that both $M$ and $\mathbb{R}^2$ form a $R$-algebra over $\mathbb{R}$ (see \url{bit.ly/3eL7LEC}).
+It was shown that both $M$ and $\mathbb{R}^2$ form a $R$-algebra over $\mathbb{R}$ (see: \url{bit.ly/3eL7LEC}).
 
   \vspace{0.3em}
   }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Approximation Theorem}{name=approx,column=1,span=1,row=0}{
+	
+The Stone-Weierstrass theorem is a generalisation of the Weierstrass approximation theorem which states that any continuous functions on 
+a closed interval can be uniformly approximated by a polynomial. This can be deduced straightaway by the Stone-Weierstrass theorem.
+
+\vspace{2mm}
+Consider the Taylor polynomial $P_n(x)$ of $s(x)= \sqrt{1- x}$ for $x \in [-1, 1]$. Using analysis, we can show that $P_n \to s$ uniformly, 
+and thus, $P_n(1-x^2) \to s(1-x^2)= \left| x \right|$ uniformly for $x \in [-1, 1]$. Now, as 
+$$f \vee g = \max \{f, g\} = \frac{1}{2}(f + g + \left| f - g \right|);$$
+$$f \wedge g = \min \{f, g\} = \frac{1}{2}(f + g - \left| f - g \right|),$$
+we see that if $\bar{\mathcal{P}}$ is the closure of the set of polynomials under uniform convergence to the limit, $\bar{\mathcal{P}}$ would 
+also be closed under the lattice operations. Thus, as $\bar{\mathcal{P}}$ form an unital subalgebra of all real to real functions, (as its closed under 
+addition and multiplication), and as $\bar{\mathcal{P}}$ separates points trivially, $\bar{\bar{\mathcal{P}}} = \bar{\mathcal{P}} = \mathbb{R}^\mathbb{R}$ 
+as required.
+
+\vspace{2mm}
+However, this can also be proved by constructing the approximant directly. By using 
+the weak law of large numbers, we can prove that the Bernstein polynomials can be used 
+to find a sequence of polynomials that uniformly converges on any continuous function 
+(see: \url{bit.ly/3gLDk39})
+
+  \vspace{0.2em}
+  }
+
+ \headerbox{Trigonometric Polynomials}{name=trig,column=1,span=1,below=approx}{
  
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{The Stone-Weierstrass Theorem}{name=stone,column=1,span=1, row=0}{
-\textit{The Stone-Weierstrass theorem} states that, given a subalgebra of $M$, $M_0$ that is 
-closed under lattice operations and separates points, $\bar{M_0} = M$, and we say $M_0$ is dense in $M$ \cite{gaddy}.
-
- }
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Outline of the proof}{name=outline,column=1,span=1,below=stone}{
-The theorem relies on two crucial lemmas:
+Another set of functions we might be interested in are the trigonometric polynomials $\mathcal{T}$ 
+where trigonometric polynomials are functions of the form
+\[f(x) = a_0 + \sum_{k = 1}^n a_k \cos(kx) + b_k \sin(kx); \hspace{1mm} a_i, b_i \in \mathbb{R}.\]
 
 \vspace{2mm}
+As the trigonometric polynomials $\mathcal{T}$ form an unital subalgebra of the
+bounded continuous functions on \([-\pi, \pi]\) (by considering the identities 
+of multiplication between trigonometric functions),
+and by considering the Fourier series of $\left| x \right|$, by the same argument as presented above,
+$\bar{\mathcal{T}}$ is closed under lattice operations and hence, by Stone-Weierstrass, 
+$\bar{\bar{\mathcal{T}}} = \bar{\mathcal{T}} = [-\pi, \pi]^\mathbb{R}$
+
+  \vspace{0.2em}
+  }
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Outline and Formalisation}{name=form,column=2,span=2,row=0}{
+
+\begin{minipage}[t]{0.475\textwidth}
+\textit{The Stone-Weierstrass theorem} was proved and formalised using the 
+\textit{Lean}, the source code of which can be found 
+in my GitHub repository:\\ \url{github.com/JasonKYi/stone-weierstrass}. 
+
+\vspace{2mm}
+The theorem itself relies on two central lemmas:
+
 {\bf Lemma 1.} For all $f \in M$, $f \in \bar{M_0}$ if and only if for all $x, y \in X$, $\epsilon > 0$, there 
-exists $g \in M_0$ such that $\left| f(x) - g(x) \right| < \epsilon$ and $\left| f(y) - g(y) \right| < \epsilon$, i.e. 
-there $M_0$ has a function arbitrarily close to $f$ at $x$ and $y$.
+exists $g \in M_0$ such that $\left| f(x) - g(x) \right| < \epsilon$ and $\left| f(y) - g(y) \right| < \epsilon$.
 
-\vspace{2mm}
 {\bf Lemma 2.} Given $S$, a subalgebra of $\mathbb{R}^2$, $S$ must be $\{(0,0)\}$, 
 $\{(x, 0) \mid x \in \mathbb{R} \}$,
 $\{(0. y) \mid y \in \mathbb{R} \}$, 
 $\{(z, z) \mid z \in \mathbb{R} \}$, or
 $\mathbb{R}^2$ itself.
 
-\vspace{3mm}
-By considering \textit{lemma 1}, it can be deduced that, for $M_0$, $M_1$, closed subalgebras of $M$ under lattice 
-operations and uniform convergence to the limit, $M_0 = M_1$ if and only if at for all distinct $x$, $y$, $M_0$ 
-and $M_1$ have the same boundary points (the boundary points of $M_i$ at $x$ $y$ is defined to be $\{(f(x), f(y)) \mid f \in M_i \}$).
-
-\vspace{2mm}
-Now by considering the fact that the boundary points of $M_0$ form a subalgebra of $\mathbb{R}^2$, we can utilise \textit{lemma 2} to 
-deduce that the boundary points must either be $\{(z, z) \mid z \in \mathbb{R} \}$, or $\mathbb{R}^2$ (the first three possibilities 
-in lemma 2 are not possible since $(1, 1)$ is in the boundary points). Now, if $M_0$ separates points then there must exist 
-$f \in M_0$, $f(x) \neq f(y)$ so that excludes $\{(z, z) \mid z \in \mathbb{R} \}$ and hence the boundary points is $\mathbb{R}^2$ and
-the theorem follows.
-
-  \vspace{0.5em}
-  }
-  
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Formalisation}{name=form,column=2,span=2,row=0}{
-
-\begin{minipage}[t]{0.475\textwidth}
-The procedure in which the formalisation was achieved is similar to the outline, the source code of which can be found in my GitHub repository:\\
-\url{github.com/JasonKYi/stone-weierstrass}
-
 \vspace{2mm}
 \textit{Lemma 1} was formalised and is represented in Lean as 
 $\tt{in\_closure₂\_iff\_dense\_at\_points}$ in $\tt{main.lean}$ the method 
-of which we will discuss below. The forward direction of the proof is trivial so we will consider the reverse. 
+of which we will discuss below. The forward direction of the proof is trivial so we will discuss the reverse. 
 
 \vspace{2mm}
 Let us fix $x$ and $\epsilon$ and define a mapping to set of $X$
@@ -350,7 +362,7 @@ Then for all $y \in X$, $y \in S(y)$ so $\bigcup_{y\in X} S(y) = X$. But as $X$ 
 so, there exists a finite index set $I$ such that $\bigcup_{i\in I} S(y_i) = X$. Thus, by letting $p_x = \bigvee_{i \in I} g_{y_i}$, we have constructed 
 a function $p_x \in  \bar{M_0}$ such that 
 $$
-p_x(z) \ge g_{y_i}(z) > f(z) - \epsilon
+p_x(z) \ge g_{y_i}(z) > f(z) - \epsilon \hspace{1mm} \text{and} \hspace{1mm} p_x(x) < f(x) + \epsilon
 $$
 for all $z \in X$ and $i \in I$	.
 
@@ -368,53 +380,34 @@ is the index set such that $\bigcup_{j\in J} T(p_{x_i}) = X$.
 The proof this lemma is rather tedious and follows directly by evoking the law of the excluded middle on different propositions 
 multiple times.
 
-\vspace{3mm}
-Thus, with both lemma 1 and lemma 2 in our arsenal, it was shown that given two subalgebra of $M$, $M_0$ and $M_1$ which are 
-closed under lattice operations, $M_0 = M_1$ if and only if they have the same boundary points with $\tt{eq\_iff\_boundary\_points\_eq}$ 
-by constructing the notion of $\tt{closure'}$ in $\tt{definitions.lean}$ for sets of points in $\mathbb{R}^2$.
+\vspace{2mm}
+Now, by considering \textit{lemma 1}, it can be deduced that, for $M_0$, $M_1$, closed subalgebras of $M$ under lattice 
+operations and uniform convergence to the limit, $M_0 = M_1$ if and only if at for all distinct $x$, $y$, $M_0$ 
+and $M_1$ have the same boundary points.
+This was formalised in $\tt{eq\_iff\_boundary\_points\_eq}$ by constructing the notion of $\tt{closure'}$ in $\tt{definitions.lean}$
 
-\vspace{3mm}
-With that, by defining the notion of $\tt{has\_seperate\_points}$ in $\tt{definitions.lean}$ the Stone-Weierstrass theorem was proved with 
-the method described in the outline with theorem statement in Lean being \\ 
+\vspace{2mm}
+Lastly, as the boundary points of $M_0$ form an unital subalgebra of $\mathbb{R}^2$ 
+as demonstrated shown by $\tt{subalgebra\_of\_boundary\_points}$ in $\tt{main.lean}$, we can utilise \textit{lemma 2} to 
+deduce that the boundary points must either be $\{(z, z) \mid z \in \mathbb{R} \}$, or $\mathbb{R}^2$ (the first three possibilities in lemma 2 are not possible since $(1, 1)$ is in the boundary points as it is unital). Now, if $M_0$ separates points then there must exist $f \in M_0$, $f(x) \neq f(y)$ so that excludes $\{(z, z) \mid z \in \mathbb{R} \}$ and hence the boundary points is $\mathbb{R}^2$ and the theorem follows. This was formalised in $\tt{main.lean}$ with the statement being 
 
+\vspace{2mm}
 \lstinline{theorem weierstrass_stone \{M₀' : subalgebra ℝ (X → ℝ)\} 
 (hc   : closure₀ M₀'.carrier = M₀'.carrier)
 (hsep : has_seperate_points M₀'.carrier) :
 closure₂ M₀'.carrier = univ}
 
-\vspace{3mm}
-with the $\tt{M₀'.carrier}$ referring to the underlying subset of $\tt{M₀'}$ the subalgebra, $\tt{hc}$ the hypothesis that 
-$\tt{M₀'.carrier}$ is closed under lattice operations and $\tt{closure_2 M₀'.carrier}$ the closure of $\tt{M₀'.carrier}$ under uniform 
-convergence.
+\vspace{2mm}
+with the $\tt{M_0'.carrier}$ referring to the underlying subset of $\tt{M_0'}$ the subalgebra, $\tt{hc}$ the hypothesis that 
+$\tt{M_0'.carrier}$ is closed under lattice operations and $\tt{closure_2 \hspace{1.5mm} M_0'.carrier}$ the closure of $\tt{M_0'.carrier}$ under uniform convergence.
 
 \end{minipage}
 
 \vspace{0.2em}
   }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Approximation Theorem}{name=approx,column=1,span=2,below=form}{
-	
-The Stone-Weierstrass theorem is a generalisation of the Weierstrass approximation theorem which states that any continuous functions on 
-a closed interval can be uniformly approximated by a polynomial. While this can be proved using the weak law of large numbers (a version 
-of which was typed up and is presented here: \url{bit.ly/3gLDk39}) it can also be deduced straightaway by the Stone-Weierstrass theorem.
-
-\vspace{2mm}
-Consider the Taylor polynomial $P_n(x)$ of $s(x)= \sqrt{1- x}$ for $x \in [-1, 1]$. Using analysis, we can show that $P_n \to s$ uniformly, 
-and thus, $P_n(1-x^2) \to s(1-x^2)= \left| x \right|$ uniformly for $x \in [-1, 1]$. Now, as 
-$$
-f \vee g = \max \{f, g\} = \frac{1}{2}(f + g + \left| f - g \right|); \hspace{2mm} f \wedge g = \min \{f, g\} = \frac{1}{2}(f + g - \left| f - g \right|),
-$$
-we see that if $\bar{\mathcal{P}}$ is the closure of the set of polynomials under uniform convergence to the limit, $\bar{\mathcal{P}}$ would 
-also be closed under the lattice operations. Thus, as $\bar{\mathcal{P}}$ form a subalgebra of all real to real functions, (as its closed under 
-addition and multiplication), and as $\bar{\mathcal{P}}$ separates points trivially, $\bar{\bar{\mathcal{P}}} = \bar{\mathcal{P}} = \mathbb{R}^\mathbb{R}$ 
-as required.
-
-  \vspace{0.2em}
-  }
 	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{References}{name=references,column=3,below=form}{
+  \headerbox{References}{name=references,column=2,span=2,below=form}{
     \smaller
     \vspace{-0.4em}
     \bibliographystyle{plain}
@@ -435,8 +428,8 @@ as required.
 				\newblock (Assessed: 02 June 2020)
 	  \bibitem{borb}
 	  	Bourbaki, N.
-	  	\newblock (1989) 'SUBALGEBRAS. IDEALS. QUOTIENT ALGEBRAS' in  Elements of mathematics, Algebra I. 
-	  	\newblock Paris: HERMANN, PUBLISHERS IN ARTS AND SCIENCE, pp. 429
+	  	\newblock (1989) 'Subalgebras. Ideals. Quotient Algebras' in  Elements of mathematics, Algebra I. 
+	  	\newblock Paris: Herman, Publisher of Science, pp. 429
       \end{thebibliography}
   }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
