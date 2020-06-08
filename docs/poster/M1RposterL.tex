@@ -189,10 +189,10 @@
   {\sf %Sans Serif
   %\bf% Serif
   \vspace*{5mm}
-  \hspace*{2mm} The Stone-Weierstrass Theorem and its Formalisation}
+  \hspace*{2mm} The Formalisation and Applications of the Stone-Weierstrass Theorem}
   % Authors
   {\linebreak
-  \hspace*{4mm} Kexing Ying
+  \hspace*{4.5mm} Kexing Ying
   }
   % University logo
   { % The makebox allows the title to flow into the logo
@@ -228,6 +228,7 @@
 \textit{The Stone-Weierstrass theorem} states that, given an unital subalgebra of $M$, $M_0$ that is 
 closed under lattice operations and separates points, $\bar{M_0} = M$, and we say $M_0$ is dense in $M$ \cite{gaddy}.
 
+This theorem is important as not only does it offer a strong result regarding function spaces, it also offers insight into interpolation as it demonstrates which set of functions can act as basis for a particular function space. 
  }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -237,7 +238,6 @@ Throughout this poster, we will let $X$ be a compact metric space, $M$ to be the
 bounded and continuous functions from $X$ to $\mathbb{R}$, $M_0$ a subset of $M$ and 
 $\bar{M_0}$ the closure of $M_0$ \textit{under uniform convergence to the limit}.
 
-\vspace{2.5mm}
 We say $M_0$ \textit{separates points} if and only if for all distinct $x, y \in X$, there 
 exists some $f \in M_0$ such that $f(x) \neq f(y)$.
 
@@ -252,11 +252,7 @@ Given $x, y \in X$, the boundary points of $M_0$ is defined to be $\{(f(x), f(y)
 We define two lattice operations \(\vee, \wedge : (X \to \mathbb{R})^2\to (X \to \mathbb{R}) \) 
 such that, for all \(f, g : X \to \mathbb{R}\), where \(f, g\) are bounded continuous functions 
 $$
-f \vee g = \max\{f, g\},
-$$
-and 
-$$
-f \wedge g = \min \{f, g\}.
+f \vee g = \max\{f, g\}; \hspace{2mm} f \wedge g = \min \{f, g\}.
 $$
 
   \vspace{0.3em}
@@ -277,18 +273,17 @@ $$
 $$
 are satisfied for all $r \in R$ and $a \in A$ \cite{lau}.
 
-\vspace{3mm}
 A \textit{unital subalgebra} $S$ of an $R$-algebra $A$ is a subset of $A$ that's closed under the induced operations 
-carried from $A$ and contains 1 \cite{borb}. 
+carried from $A$ and contains 1 \cite{lau}. 
 
-\vspace{3mm}
+\vspace{2.6mm}
 It was shown that both $M$ and $\mathbb{R}^2$ form a $R$-algebra over $\mathbb{R}$ (see: \url{bit.ly/3eL7LEC}).
 
   \vspace{0.3em}
   }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Approximation Theorem}{name=approx,column=1,span=1,row=0}{
+  \headerbox{Application: Weierstrass Theorem}{name=approx,column=1,span=1,row=0}{
 	
 The Stone-Weierstrass theorem is a generalisation of the Weierstrass approximation theorem which states that any continuous functions on 
 a closed interval can be uniformly approximated by a polynomial. This can be deduced straightaway by the Stone-Weierstrass theorem.
@@ -305,19 +300,17 @@ addition and multiplication), and as $\bar{\mathcal{P}}$ separates points trivia
 \vspace{2mm}
 However, this can also be proved by constructing the approximant directly. By using 
 the weak law of large numbers, we can prove that the Bernstein polynomials can be used 
-to find a sequence of polynomials that uniformly converges on any continuous function 
-(see: \url{bit.ly/2Mz8ug8})
-
+to find a sequence of polynomials that uniformly converges on any continuous function.
+(A full proof was typed up and is presented here: \url{bit.ly/2Mz8ug8})
   \vspace{0.2em}
   }
 
- \headerbox{Trigonometric Polynomials}{name=trig,column=1,span=1,below=approx}{
+ \headerbox{Application: Trig. Polynomials}{name=trig,column=1,span=1,below=approx}{
  
 Another set of functions we might be interested in are the trigonometric polynomials $\mathcal{T}$ 
 where trigonometric polynomials are functions of the form
 \[f(x) = a_0 + \sum_{k = 1}^n a_k \cos(kx) + b_k \sin(kx); \hspace{1mm} a_i, b_i \in \mathbb{R}.\]
 
-\vspace{2mm}
 As the trigonometric polynomials $\mathcal{T}$ form an unital subalgebra of the
 bounded continuous functions on \([-\pi, \pi]\) (by considering the identities 
 of multiplication between trigonometric functions),
@@ -327,10 +320,34 @@ $\bar{\bar{\mathcal{T}}} = \bar{\mathcal{T}} = [-\pi, \pi]^\mathbb{R}$
 
   \vspace{0.2em}
   }
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Outline and Formalisation}{name=form,column=2,span=2,row=0}{
 
-\begin{minipage}[t]{0.475\textwidth}
+ \headerbox{Further Discussion \& Interpolation}{name=inter,column=3,span=1,row=0}{
+ While the Stone-Weierstrass theorem proved existence, and the Bernstein polynomials offerd us a method to find a polynomial arbitrarily close to any continuous function with respect to the uniform norm, it is not necessarily the best approximation.
+
+\vspace{2mm}
+Using some simple \textit{Python} scripts, we can easily see that for functions such as $x^2$, the Bernstein 
+polynomials does not offer as much accuracy as just using $x^2$ as its own approximation.
+\begin{center}
+\vspace{0mm}
+\includegraphics[scale = 0.32]{x_squared}
+\end{center}
+
+Consider instead the interpolation theorem:
+
+\textbf{Theorem.} Given $\{(x_0, y_0), \cdots, (x_n, y_n) \} \subseteq \mathbb{R}^2$, using Lagrange polynomials, we can construct polynomial that interpolates the set. \cite{humph}
+
+\vspace{2mm}
+So, if we let $f : [a, b] \to \mathbb{R}$ be a continuous function, we can approximate $f$ using the polynomial that interpolates the set of equidistant points from $a$ to $b$. By implementing this algorithm in Python, we find that for $n = 3$ for $f : [-1, 1] \to \mathbb{R}: x \mapsto x^2$, this method results in a polynomial approximation of $x^2$ (Very Good!). 
+
+\vspace{2mm}
+However, unlike the Bernstein polynomial method, this method does not guarantee that the uniform norm of the difference of the function and its approximation tends to zero as demonstrated by interpolating \textit{Runge's function} (it in fact tends to $+ \infty$). To mitigate this, one can instead use Spline interpolation however this results in an approximant that is a piecewise polynomial instead of just a polynomial.
+
+  \vspace{0.2em}
+  }  
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Outline and Formalisation}{name=form,column=2,span=1,row=0}{
+
 \textit{The Stone-Weierstrass theorem} was proved and formalised using the 
 \textit{Lean}, the source code of which can be found 
 in my GitHub repository:\\ \url{github.com/JasonKYi/stone-weierstrass}. 
@@ -349,46 +366,20 @@ $\mathbb{R}^2$ itself.
 
 \vspace{2mm}
 \textit{Lemma 1} was formalised and is represented in Lean as 
-$\tt{in\_closure₂\_iff\_dense\_at\_points}$ in $\tt{main.lean}$ the method 
-of which we will discuss below. The forward direction of the proof is trivial so we will discuss the reverse. 
-
-\vspace{2mm}
-Let us fix $x$ and $\epsilon$ and define a mapping to set of $X$
-$$S : X \to \texttt{set} \hspace{1mm} X := \lambda y, \{z | f(z) - g_y(z) < \epsilon \},$$
-where $g_y$ was chosen such that $\left| f(x) - g_y(x) \right| < \epsilon$ and $\left| f(y) - g_y(y) \right| < \epsilon$.
-
-Then for all $y \in X$, $y \in S(y)$ so $\bigcup_{y\in X} S(y) = X$. But as $X$ is compact, $\bigcup_{y\in X} S(y)$ admits a finite subcover; 
-so, there exists a finite index set $I$ such that $\bigcup_{i\in I} S(y_i) = X$. Thus, by letting $p_x = \bigvee_{i \in I} g_{y_i}$, we have constructed 
-a function $p_x \in  \bar{M_0}$ such that 
-$$
-p_x(z) \ge g_{y_i}(z) > f(z) - \epsilon \hspace{1mm} \text{and} \hspace{1mm} p_x(x) < f(x) + \epsilon
-$$
-for all $z \in X$ and $i \in I$	.
-
-Now, by defining a similar mapping to set of $X$, 
-$$T : X \to \texttt{set} \hspace{1mm} X := \lambda x, \{z | p_x(z) < f(z) + \epsilon \},$$
-we again create a finite subcover of $X$ and thus can create the required function with $\bigwedge_{j \in J}p_{x_j}$ where $J$ 
-is the index set such that $\bigcup_{j\in J} T(p_{x_i}) = X$.
-\end{minipage}
-\begin{minipage}[t]{0.05\textwidth}
-\hspace{0mm}
-\end{minipage}
-\begin{minipage}[t]{0.46\textwidth}
-
-\textit{Lemma 2} was also formalised and is represented in Lean as $\tt{subalgebra\_of\_R2}$ and can be found in $\tt{ralgebra.lean}$.
-The proof this lemma is rather tedious and follows directly by evoking the law of the excluded middle on different propositions 
+$\tt{in\_closure₂\_iff\_dense\_at\_points}$ in $\tt{main.lean}$ by constructing
+constructing mappings from $X$ to set of $X$ while considering the compactness of $X$;
+while \textit{Lemma 2} was also formalised and is represented in Lean as $\tt{subalgebra\_of\_R2}$ and can be found in $\tt{ralgebra.lean}$ which proof involved evoking the law of the excluded middle on different propositions.
 multiple times.
 
 \vspace{2mm}
-Now, by considering \textit{lemma 1}, it can be deduced that, for $M_0$, $M_1$, closed subalgebras of $M$ under lattice 
-operations and uniform convergence to the limit, $M_0 = M_1$ if and only if at for all distinct $x$, $y$, $M_0$ 
-and $M_1$ have the same boundary points.
-This was formalised in $\tt{eq\_iff\_boundary\_points\_eq}$ by constructing the notion of $\tt{closure'}$ in $\tt{definitions.lean}$
+Now, let $M_0$, $M_1$ be closed subalgebras of $M$ under lattice operations,
+then, by considering lemma 1, it was deduced $\bar{M_0} = \bar{M_1}$ if and only if at for all distinct $x$, $y$, $\bar{M_0}$ and $\bar{M_1}$ have the same boundary points. This was formalised in $\tt{eq\_iff\_boundary\_points\_eq}$ in $\tt{main.lean}$
 
 \vspace{2mm}
-Lastly, as the boundary points of $M_0$ form an unital subalgebra of $\mathbb{R}^2$ 
-as demonstrated shown by $\tt{subalgebra\_of\_boundary\_points}$ in $\tt{main.lean}$, we can utilise \textit{lemma 2} to 
-deduce that the boundary points must either be $\{(z, z) \mid z \in \mathbb{R} \}$, or $\mathbb{R}^2$ (the first three possibilities in lemma 2 are not possible since $(1, 1)$ is in the boundary points as it is unital). Now, if $M_0$ separates points then there must exist $f \in M_0$, $f(x) \neq f(y)$ so that excludes $\{(z, z) \mid z \in \mathbb{R} \}$ and hence the boundary points is $\mathbb{R}^2$ and the theorem follows. This was formalised in $\tt{main.lean}$ with the statement being 
+Finally. by showing that the boundary points of $M_0$ form an unital subalgebra of $\mathbb{R}^2$, we see that the boundary points of  $\bar{M_0}$ must be $\mathbb{R^2}$ by lemma 2 and hence, as the boundary points of $M$ is $\mathbb{R}^2$ is $\mathbb{R}^2$, it follows $\bar{M_0} = M$. As required!
+
+\vspace{2mm}
+This was formalised in Lean in $\tt{main.lean}$ with the theorem statement being
 
 \vspace{2mm}
 \lstinline{theorem weierstrass_stone \{M₀' : subalgebra ℝ (X → ℝ)\} 
@@ -396,11 +387,6 @@ deduce that the boundary points must either be $\{(z, z) \mid z \in \mathbb{R} \
 (hsep : has_seperate_points M₀'.carrier) :
 closure₂ M₀'.carrier = univ}
 
-\vspace{2mm}
-with the $\tt{M_0'.carrier}$ referring to the underlying subset of $\tt{M_0'}$ the subalgebra, $\tt{hc}$ the hypothesis that 
-$\tt{M_0'.carrier}$ is closed under lattice operations and $\tt{closure_2 \hspace{1.5mm} M_0'.carrier}$ the closure of $\tt{M_0'.carrier}$ under uniform convergence.
-
-\end{minipage}
 
 \vspace{0.2em}
   }
@@ -425,10 +411,10 @@ $\tt{M_0'.carrier}$ is closed under lattice operations and $\tt{closure_2 \hspac
 				\newblock (2018) Algebra over Commutative Semiring (under category) [Online].
 				\newblock Available at: \url{bit.ly/3gLIPyS}
 				\newblock (Assessed: 02 June 2020)
-	  \bibitem{borb}
-	  	Bourbaki, N.
-	  	\newblock (1989) 'Subalgebras. Ideals. Quotient Algebras' in  Elements of mathematics, Algebra I. 
-	  	\newblock Paris: Herman, Publisher of Science, pp. 429
+	  \bibitem{humph}
+	  	 Humpherys, J. and Jarvis, T. J.
+	  	\newblock (2020) Foundations of Applied Mathematics Volume 2: Algorithms, Approximation, Optimization
+	  	\newblock Society for Industrial and Applied Mathematics, pp. 418
       \end{thebibliography}
   }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
