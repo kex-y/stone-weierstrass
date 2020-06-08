@@ -22,8 +22,11 @@ def approx_plot(is_seq = False):
     else:
         for i in range(1, n + 1):
             approx_y_vals = np.vectorize(bernstein_poly(f, i))(x_vals)
-            plt.plot(x_vals, approx_y_vals)
-    plt.plot(x_vals, f(x_vals))
+            label_str = "{}-th Bernstein Approx." .format(i)
+            plt.plot(x_vals, approx_y_vals, label = label_str)
+
+    plt.plot(x_vals, f(x_vals), label = "$x^2$")
+    plt.legend(loc = "upper right")
     plt.show()
 
 approx_plot(is_seq = True)
