@@ -2,7 +2,7 @@
 
 I have chosen to do the second subproject - *The Weierstass approximation* theorem for my first year project.
 
-In this project, I have decided to investigate a generalisation of the approximation theorem - *The Stone-Weierstrass theorem* by formalising it in an interactive theorem prover - *Lean*. I will also discuss some immediate result of this theorem one of which is of course the Weierstass approximation theorem.
+In this project, I have decided to investigate a generalisation of the approximation theorem - *The Stone-Weierstrass theorem* by formalising it in an interactive theorem prover - *Lean*. I will also discuss some immediate result of this theorem one of which is of course the Weierstass approximation theorem. Furthermore, I will discuss the approximation of continuous functions by using Bernstein polynomials in comparison to other interpolation methods - in particular, the spline interpolation.
 
 ## The Stone-Weierstass Theorem
 
