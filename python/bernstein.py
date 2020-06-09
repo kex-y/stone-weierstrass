@@ -23,7 +23,6 @@ def approx_plot(is_seq = False):
             plt.plot(x_vals, approx_y_vals, label = label_str)
 
     plt.plot(x_vals, f(x_vals), label = "$x^2$")
-    plt.legend(loc = "best")
-    plt.show()
+    plt.legend(loc = "best"); plt.show()
 
 approx_plot(is_seq = True)
