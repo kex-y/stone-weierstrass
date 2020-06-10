@@ -310,9 +310,10 @@ $\bar{\bar{\mathcal{T}}} = \bar{\mathcal{T}} = [-\pi, \pi]^\mathbb{R}$
   }
 
  \headerbox{Further Discussion \& Interpolation}{name=inter,column=3,span=1,row=0}{
-Let us consider the approximation of $x^2$ using Bernstein polynomials,by calculating explicitly, we find the $n$-th Bernstein approximations of $x^2$ results in the sequence 
-$$B_n(x)=\frac{1}{n} x + \frac{n-1}{n} x^2,$$
-resulting $\sup_{x\in[-1, 1]} \left|x^2 - B_n(x) \right| = 2 / n$; much worse than just using $x^2$ as its own approximation.
+While the Stone-Weierstrass theorem proved the density of polynomial functions, the Bernstein polynomials provide a method for constructing a sequence of polynomials that uniformly converges to any continuous function.\\
+Consider the approximation of $x^2$ for $x \in [0, 1]$ using Bernstein polynomials,
+$$B_n(x)=\frac{1}{n} x + \frac{n-1}{n} x^2.$$
+By using calculus, we find $\sup_{x\in[0, 1]} \left|x^2 - B_n(x) \right| = (4n)^{-1}$; much worse than just using $x^2$ as its own approximation.
 \begin{center}
 \includegraphics[scale = 0.515]{x_squared}
 \end{center}
@@ -323,9 +324,8 @@ Consider instead the interpolation theorem:
 \textbf{Theorem.} Given $\{(x_0, y_0), \cdots, (x_n, y_n) \} \subseteq \mathbb{R}^2$, using Lagrange polynomials, we can construct polynomial that interpolates the set. \cite{humph}
 
 \vspace{2mm}
-So, if we let $f : [a, b] \to \mathbb{R}$ be a continuous function, we can approximate $f$ using the polynomial that interpolates the set of equidistant points from $a$ to $b$. By implementing this algorithm in Python, we find that for $n = 3$ for $f : [-1, 1] \to \mathbb{R}: x \mapsto x^2$, this method results in a polynomial approximation of $x^2$ (a very good error of zero!). 
-
-However, unlike the Bernstein polynomial method, this method does not guarantee that the uniform norm of the difference of the function and its approximation tends to zero as demonstrated by interpolating \textit{Runge's function} (it in fact tends to $+ \infty$). To mitigate this, one can instead use Spline interpolation however this results in an approximant that is a piecewise polynomial instead of just a polynomial.
+Let $f : [a, b] \to \mathbb{R}$ be a continuous function, we can approximate $f$ using the polynomial that interpolates the set of equidistant points from $a$ to $b$. Using Python, we find that for $n = 3$ for $x^2$ on $[0.1]$, this method results in a polynomial approximation of $L_3(x) = x^2$.\\ 
+However, $\lVert f - P_n \rVert_\infty$ does not necessarily tends to 0 exemplified by \textit{Runge's function}. To mitigate this, one can instead use Spline interpolation however this results in an approximant that is a piecewise polynomial instead of just a polynomial.
 
   \vspace{0.2em}
   }  
