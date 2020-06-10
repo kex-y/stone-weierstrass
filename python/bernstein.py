@@ -10,7 +10,7 @@ def approx_plot(is_seq = False):
     import matplotlib.pyplot as plt
 
     f, n = user_input()
-    x_vals = np.linspace(-1, 1, 100)
+    x_vals = np.linspace(0, 1, 100)
 
     if is_seq == False:
         approx_y_vals = np.vectorize(bernstein_poly(f, n))(x_vals)
