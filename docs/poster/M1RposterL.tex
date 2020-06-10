@@ -236,7 +236,7 @@ Let $X$ be a compact metric space and $M$ the set of all continuous function fro
 }
 \end{minipage}\\
 where we define the lattice operations \(\vee, \wedge : (X \to \mathbb{R})^2\to (X \to \mathbb{R}) \) 
-such that, for all \(f, g : X \to \mathbb{R}\), where \(f, g\) are bounded continuous functions 
+such that, for all \(f, g : X \to \mathbb{R}\), where \(f, g\) are continuous functions 
 $$
 f \vee g = \max\{f, g\}; \hspace{2mm} f \wedge g = \min \{f, g\};
 $$
@@ -257,7 +257,7 @@ $$
 $$
 for all $\alpha, \beta \in \mathbb{R}$, $\alpha < \beta$. Let us now define
 $$ A_n(\delta) = \left\{\omega : \left| \frac{S_n(\omega)}{n} - x \right| \ge \delta \right\},$$
-then, for all $\epsilon > 0$, as $f(x) : [0, 1] \to \mathbb{R} := \left| \alpha x - \beta \right|$ is continuous on the compact interval $[0, 1]$, it is uniformly continuous on the same interval; so there is some $\delta > 0$ such that for all $\left| x - y \right| < \delta$,  $\frac{\epsilon}{2} > \left| f(x) - f(y) \right|$. Now, by LLN, $\text{Pr}(A_n (\delta)) \to 0$, so, choose $N $ such that $\left|\text{Pr}(A_N(\delta)) \right| < 0$, then
+then, for all $\epsilon > 0$, as $f(x) : [0, 1] \to \mathbb{R} := \left| \alpha x - \beta \right|$ is continuous on the compact interval $[0, 1]$, it is uniformly continuous on the same interval; so there is some $\delta > 0$ such that for all $\left| x - y \right| < \delta$,  $\frac{\epsilon}{2} > \left| f(x) - f(y) \right|$. Now, by LLN, $\text{Pr}(A_n (\delta)) \to 0$, so, choose $N $ such that $\left|\text{Pr}(A_N(\delta)) \right| < 1/2$, then
 \begin{align*}
 \frac{\epsilon}{2} & > \mathbb{E} \left[ \mathbf{1}_{(A_N)^c}\left| f(x) - f \left(\frac{S_N}{N}\right) \right| \mid A_N(\delta)^c \right] \\
 & \ge \left| f(x) - \mathbb{E} \left[f \left(\frac{S_N}{N}\right) \right] \right| \text{Pr}((A_N(\delta))^c).
@@ -276,41 +276,43 @@ The Weierstrass approximation theorem states
 \centering
 \noindent\fbox{%
     \parbox{\textwidth}{%
- Let $f$ be a real continuous function on a closed interval. Then for all $\epsilon > 0$, there exists a polynomial 
+ Let $f$ be a real continuous function on a closed interval $[\alpha, \beta]$. Then for all $\epsilon > 0$, there exists a polynomial 
 $P_n$ such that 
-$$\sup_{x \in [0, 1]} \left| f(x) - P_n(x) \right| < \epsilon. $$
+$$\sup_{x \in [\alpha, \beta]} \left| f(x) - P_n(x) \right| < \epsilon. $$
     }%
 }
 \end{minipage}\\ 
-This can be deduced straightaway by the Stone-Weierstrass theorem!
 
 \vspace{2mm}
-From the section \textit{$\left|x\right|$ is in the Closure!} we have shown that there exists a sequence of polynomials uniformly converging to $\left| x \right|$ on any compact interval. Now, as 
+By section \textit{Lemma: $\left|x\right|$ is in the Closure!}, the sequence of polynomial $P_n(x) \to \left| x \right|$ uniformly where,
+$$
+P_n(x) := \sum_{k=0}^n \left| \alpha \frac{k}{n} - \beta \right| \binom{n}{i} x^i (1 - x)^{n - i}
+$$
+ Now, as 
 $$f \vee g = \frac{1}{2}(f + g + \left| f - g \right|);$$
 $$f \wedge g = \frac{1}{2}(f + g - \left| f - g \right|),$$
-we see that if $\bar{\mathcal{P}}$ is the closure of the set of polynomials under uniform convergence to the limit, $\bar{\mathcal{P}}$ would 
-also be closed under the lattice operations. Thus, as $\bar{\mathcal{P}}$ form an unital subalgebra of all real to real functions, (as it contains 1,closed under addition, multiplication and scalar multiplication), and as $\bar{\mathcal{P}}$ separates points trivially, $\bar{\bar{\mathcal{P}}} = \bar{\mathcal{P}} = [\alpha, \beta]^\mathbb{R}$ for all $\alpha, \beta \in \mathbb{R}, \alpha < \beta$ As required!
+we see $\bar{\mathcal{P}}$ (the closure of polynomials under uniform convergence) is closed under the lattice operations. Thus, as $\bar{\mathcal{P}}$ form an unital subalgebra of all real to real functions, (as it contains 1, closed under addition, multiplication and scalar multiplication), and as $\bar{\mathcal{P}}$ separates points trivially, $\bar{\bar{\mathcal{P}}} = \bar{\mathcal{P}} = [\alpha, \beta]^\mathbb{R}$ for all $\alpha, \beta \in \mathbb{R}, \alpha < \beta$ as required!
   \vspace{0.2em}
   }
 
  \headerbox{Application: Trig. Polynomials}{name=trig,column=1,span=1,below=modulus}{
  
-Another set of functions we might be interested in are the trigonometric polynomials $\mathcal{T}$ 
-where trigonometric polynomials are functions of the form
-\[f(x) = a_0 + \sum_{k = 1}^n a_k \cos(kx) + b_k \sin(kx); \hspace{1mm} a_i, b_i \in \mathbb{R}.\]
-
-As the trigonometric polynomials $\mathcal{T}$ form an unital subalgebra of the
-bounded continuous functions on \([-\pi, \pi]\) (by considering the identities 
-of multiplication between trigonometric functions),
-and by considering the Fourier series of $\left| x \right|$, by the same argument as presented above,
+Another set of functions that are interesting are the trigonometric polynomials $\mathcal{T}$.
+As any constant is a trigonometric polynomial, $1 \in \mathcal{T}$ while $\mathcal{T}$ is trivially closed under addition and scalar multiplication. Thus, by considering the identity
+$$
+\sin(n x) \cos(k x) = \frac{1}{2}(\cos(n-k)x - \cos(n+k)x),
+$$
+and similarly the identities of $\sin(nx)\sin(kx)$ and $\cos(nx)\cos(kx)$, $\mathcal{T}$ is closed under multiplication. Thus 
+$\mathcal{T}$ form an unital subalgebra of continuous functions on \([-\pi, \pi]\),
+and by considering the Fourier series of $\left| x \right|$,
 $\bar{\mathcal{T}}$ is closed under lattice operations and hence, by Stone-Weierstrass, 
-$\bar{\bar{\mathcal{T}}} = \bar{\mathcal{T}} = [-\pi, \pi]^\mathbb{R}$
+$\bar{\bar{\mathcal{T}}} = \bar{\mathcal{T}} = [-\pi, \pi]^\mathbb{R}$.
 
   \vspace{0.2em}
   }
 
  \headerbox{Further Discussion \& Interpolation}{name=inter,column=3,span=1,row=0}{
-While the Stone-Weierstrass theorem proved the density of polynomial functions, the Bernstein polynomials provide a method for constructing a sequence of polynomials that uniformly converges to any continuous function.\\
+The Stone-Weierstrass theorem proved the density of polynomial functions, but does not provide a construction. We can achieve this using the Bernstein polynomials.
 Consider the approximation of $x^2$ for $x \in [0, 1]$ using Bernstein polynomials,
 $$B_n(x)=\frac{1}{n} x + \frac{n-1}{n} x^2.$$
 By using calculus, we find $\sup_{x\in[0, 1]} \left|x^2 - B_n(x) \right| = (4n)^{-1}$; much worse than just using $x^2$ as its own approximation.
@@ -319,13 +321,16 @@ By using calculus, we find $\sup_{x\in[0, 1]} \left|x^2 - B_n(x) \right| = (4n)^
 \end{center}
 
 \vspace{-2mm}
-Consider instead the interpolation theorem:
+Consider instead the Lagrange interpolation \cite{humph}.
 
-\textbf{Theorem.} Given $\{(x_0, y_0), \cdots, (x_n, y_n) \} \subseteq \mathbb{R}^2$, using Lagrange polynomials, we can construct polynomial that interpolates the set. \cite{humph}
+Given $(x_0, y_0), \cdots, (x_n, y_n)$ be $n$ distinct points, we want polynomial $L_n(x) = \sum_{i=0}^n a_ix^i$, $L_n(x_i) = y_i$  $\implies V[a_i] = [y_i]$ where $V$ is the Vandermonde matrix such that $V_{i,j} = x_{i-1}^{j-1}$. As $V_{i,j}$ is invertible by the Vandermonde determinant, we found an unique coefficient vector interpolating these points.
+
 
 \vspace{2mm}
-Let $f : [a, b] \to \mathbb{R}$ be a continuous function, we can approximate $f$ using the polynomial that interpolates the set of equidistant points from $a$ to $b$. Using Python, we find that for $n = 3$ for $x^2$ on $[0.1]$, this method results in a polynomial approximation of $L_3(x) = x^2$.\\ 
-However, $\lVert f - P_n \rVert_\infty$ does not necessarily tends to 0 exemplified by \textit{Runge's function}. To mitigate this, one can instead use Spline interpolation however this results in an approximant that is a piecewise polynomial instead of just a polynomial.
+Let $f : [a, b] \to \mathbb{R}$ be a continuous, we can approximate $f$ using the polynomial that interpolates the set of equidistant points from $a$ to $b$. With Python, we find that for $n = 3$ for $x^2$ on $[0, 1]$, this method results in a polynomial approximation of $L_3(x) = x^2$.
+
+\vspace{2mm}
+However, $\lVert f - P_n \rVert_\infty$ does not necessarily tends to 0 exemplified by \textit{Runge's function}. To mitigate this, one can instead use \textit{Spline interpolation} however this results in an approximant that is a piecewise polynomial instead of just a polynomial.
 
   \vspace{0.2em}
   }  
@@ -335,9 +340,10 @@ However, $\lVert f - P_n \rVert_\infty$ does not necessarily tends to 0 exemplif
 {\bf Lemma 1.} For all $f \in M$, $f$ is in $\bar{M_0}$ if and only if for all $x, y \in X$, $\epsilon > 0$, there 
 exists $g \in M_0$ such that $\left| f(x) - g(x) \right| < \epsilon$ and $\left| f(y) - g(y) \right| < \epsilon$.
 
-\textit{Proof.} The forward direction is trivial so we will consider the reverse. Let us fix $x$ and $\epsilon$ and define a mapping $S : X \to \texttt{set} \hspace{1mm} X $,
+\textit{Proof.} The forward direction is by definition so we consider the reverse. Suppose for all $x, y \in X$, $\epsilon > 0$, there 
+exists $g \in M_0$ such that $\left| f(x) - g(x) \right| < \epsilon$ and $\left| f(y) - g(y) \right| < \epsilon$ $(*)$. Let us fix $x$ and $\epsilon$ and define the mapping
 $$S(y) := \{z \in X \mid f(z) - g_y(z) < \epsilon \},$$
-where $g_y$ was chosen such that $\left| f(x) - g_y(x) \right| < \epsilon$ and $\left| f(y) - g_y(y) \right| < \epsilon$.
+where $g_y$ was chosen such that $\left| f(x) - g_y(x) \right| < \epsilon$ and $\left| f(y) - g_y(y) \right| < \epsilon$ which existence is guaranteed by $(*)$.
 
 Then for all $y \in X$, $y \in S(y)$ so $\bigcup_{y\in X} S(y) = X$. But as $X$ is compact, $\bigcup_{y\in X} S(y)$ admits a finite subcover; 
 so, there exists a finite index set $I$ such that $\bigcup_{i\in I} S(y_i) = X$. Thus, by letting $p_x = \bigvee_{i \in I} g_{y_i}$, we have constructed 
@@ -347,7 +353,7 @@ p_x(z) \ge g_{y_i}(z) > f(z) - \epsilon \hspace{1mm} \text{and} \hspace{1mm} p_x
 $$
 for all $z \in X$ and $i \in I$	.
 
-Now, by defining a similar mapping to set of $X$, 
+Now, by defining a similar mapping, $T$,  
 $$T := \{z \in X \mid p_x(z) < f(z) + \epsilon \},$$
 we again create a finite subcover of $X$ and thus can create the required function with $\bigwedge_{j \in J}p_{x_j}$ where $J$ 
 is the index set such that $\bigcup_{j\in J} T(x_j) = X$.
@@ -367,12 +373,10 @@ Let $M_0$, $M_1$ be closed subalgebras of $M$ under lattice operations,
 by lemma 1, it is deduced $\bar{M_0} = \bar{M_1}$ iff. for distinct $x$, $y$, $\bar{M_0}$ and $\bar{M_1}$ have the same boundary points.
 
 \vspace{2mm}
-Now, as boundary points of $M_0$ form an unital subalgebra of $\mathbb{R}^2$, the boundary points of  $\bar{M_0}$ must be $\mathbb{R}^2$ by lemma 2 (the first three options excluded as $1 \in M_0$ and the fourth excluded as $M_0$ separate points) hence, as the boundary points of $M$ is $\mathbb{R}^2$ is $\mathbb{R}^2$, it follows $\bar{M_0} = M$ as required!
+Now, as boundary points of $M_0$ form an unital subalgebra of $\mathbb{R}^2$, the boundary points of  $\bar{M_0}$ must be $\mathbb{R}^2$ by lemma 2 (the first three options excluded as $1 \in M_0$ and the fourth excluded as $M_0$ \textbf{separate points}) hence, as the boundary points of $M$ is $\mathbb{R}^2$ is $\mathbb{R}^2$, it follows $\bar{M_0} = M$ as required!
 
 \vspace{2mm}
-\textit{The Stone-Weierstrass theorem} was proved and formalised using the 
-\textit{Lean}, the source code of which can be found 
-in my GitHub repository:\\ \url{github.com/JasonKYi/stone-weierstrass/tree/master/srcs}. 
+The theorem was also formalised using the \textit{Lean}:\\ \url{github.com/JasonKYi/stone-weierstrass/tree/master/srcs}. 
 
 \vspace{0.2em}
   }
