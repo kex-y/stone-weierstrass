@@ -225,87 +225,75 @@
       \tikz{\useasboundingbox (-0.2em,-0.32em) rectangle(0.2em,0.32em); \draw[draw=black,fill=baposterBGone!80!black!#1!white,line width=0.03em] (0,0) circle(0.18em);}}
 
   \headerbox{The Stone-Weierstrass Theorem}{name=stone,column=0,span=1, row=0}{
-\textit{The Stone-Weierstrass theorem} states that, given an unital subalgebra of $M$, $M_0$ that is 
-closed under lattice operations and separates points, $\bar{M_0} = M$, and we say $M_0$ is dense in $M$ \cite{gaddy}.
+Let $X$ be a compact metric space and $M$ the set of all continuous function from $X$ to $\mathbb{R}$, then the 
+\textit{Stone-Weierstrass theorem} states that, 
+\begin{minipage}{0.97\textwidth}
+\centering
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+      Given an unital subalgebra of $M$, $M_0$ (i.e. a subset of $M$ that contains 1 and is closed under addition, multiplication and scalar multiplication) that is closed under the lattice operations and separates points, $\bar{M_0} = M$; \cite{gaddy}
+    }%
+}
+\end{minipage}\\
+where we define the lattice operations \(\vee, \wedge : (X \to \mathbb{R})^2\to (X \to \mathbb{R}) \) 
+such that, for all \(f, g : X \to \mathbb{R}\), where \(f, g\) are bounded continuous functions 
+$$
+f \vee g = \max\{f, g\}; \hspace{2mm} f \wedge g = \min \{f, g\};
+$$
+$\bar{M_0}$ the closure of $M_0$ \textit{under uniform convergence to the limit} 
+and we say $M_0$ \textit{separates points} if and only if for all distinct $x, y \in X$, there exists some $f \in M_0$ such that $f(x) \neq f(y)$.
 
-This theorem is important as not only does it offer a strong result regarding function spaces, it also offers insight into interpolation as it demonstrates which set of functions can act as basis for a particular function space. 
+\vspace{0.3em}
+ }
+ 
+   \headerbox{Lemma: $\left|x\right|$ is in the Closure!}{name=modulus,column=1,span=1, row = 0}{
+
+Let $X_1, \cdots X_n$ be a sequence of i.i.d. Bernoulli random variables with parameter $x$ and let $S_n = \sum_{i= 1}^n X_i$ so $S_n \sim Bin(n, x)$. Then by the \textit{law of the unconscious statistician}, we see, 
+$$
+\mathbb{E}\left(\left| \alpha \frac{S_n}{n} - \beta \right| \right) = \sum_{k=0}^n \left| \alpha \frac{k}{n} - \beta \right|\text{Pr}\left(S_n = nk\right)
+$$ 
+\vspace{-3mm}$$
+ = \sum_{k=0}^n \left| \alpha \frac{k}{n} - \beta \right| \binom{n}{i} x^i (1 - x)^{n - i} =: P_n(x)
+$$
+for all $\alpha, \beta \in \mathbb{R}$, $\alpha < \beta$. Let us now define
+$$ A_n(\delta) = \left\{\omega : \left| \frac{S_n(\omega)}{n} - x \right| \ge \delta \right\},$$
+then, for all $\epsilon > 0$, as $f(x) : [0, 1] \to \mathbb{R} := \left| \alpha x - \beta \right|$ is continuous on the compact interval $[0, 1]$, it is uniformly continuous on the same interval; so there is some $\delta > 0$ such that for all $\left| x - y \right| < \delta$,  $\frac{\epsilon}{2} > \left| f(x) - f(y) \right|$. Now, by LLN, $\text{Pr}(A_n (\delta)) \to 0$, so, choose $N $ such that $\left|\text{Pr}(A_N(\delta)) \right| < 0$, then
+\begin{align*}
+\frac{\epsilon}{2} & > \mathbb{E} \left[ \mathbf{1}_{(A_N)^c}\left| f(x) - f \left(\frac{S_N}{N}\right) \right| \mid A_N(\delta)^c \right] \\
+& \ge \left| f(x) - \mathbb{E} \left[f \left(\frac{S_N}{N}\right) \right] \right| \text{Pr}((A_N(\delta))^c).
+\end{align*}
+Now as $\mathbb{E} \left[f \left(\frac{S_N}{N}\right) \right] = P_N(x)$, we have $\epsilon/ 2 > \left|f(x) - P_N(x)\right| (1 - \text{Pr}(A_N(\delta))) > \left|f(x) - P_N(x)\right|/2$, so $P_n(x) \to f(x) = \left| \alpha x - \beta \right|$ uniformly for $x\in [0,1]$ and $P_n(\frac{x + \beta}{\alpha}) \to \left| x \right|$ uniformly for all $x \in [\alpha, \beta]$.
+
+
+\vspace{0.3em}
  }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Variables and Definitions}{name=notations,column=0,below=stone}{
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Throughout this poster, we will let $X$ be a compact metric space, $M$ to be the set of all 
-bounded and continuous functions from $X$ to $\mathbb{R}$, $M_0$ a subset of $M$ and 
-$\bar{M_0}$ the closure of $M_0$ \textit{under uniform convergence to the limit}.
-
-We say $M_0$ \textit{separates points} if and only if for all distinct $x, y \in X$, there 
-exists some $f \in M_0$ such that $f(x) \neq f(y)$.
-
-Given $x, y \in X$, the boundary points of $M_0$ is defined to be $\{(f(x), f(y)) \mid f \in M_0 \}$.
-
-  \vspace{0.3em}
-  }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Lattice Operations}{name=lattice,column=0,below=notations}{
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We define two lattice operations \(\vee, \wedge : (X \to \mathbb{R})^2\to (X \to \mathbb{R}) \) 
-such that, for all \(f, g : X \to \mathbb{R}\), where \(f, g\) are bounded continuous functions 
-$$
-f \vee g = \max\{f, g\}; \hspace{2mm} f \wedge g = \min \{f, g\}.
-$$
-
-  \vspace{0.3em}
-  }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{$R$-algebra and Subalgebra}{name=algebra,column=0,below=lattice}{
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-An \textit{$R$-algebra} is a mathematical object consisting of a commutative ring $R$ and a 
-semi-ring $A$ such that there exists scalar multiplication \(\cdot : R \times A \to A\) 
-and a homomorphism from $R$ to $A$, \(\phi : R \to A\) such that 
-$$
-r \cdot a = \phi(r) \times a,
-$$
-and 
-$$
-\phi(r) \times a = a \times \phi(r),
-$$
-are satisfied for all $r \in R$ and $a \in A$ \cite{lau}.
-
-A \textit{unital subalgebra} $S$ of an $R$-algebra $A$ is a subset of $A$ that's closed under the induced operations 
-carried from $A$ and contains 1 \cite{lau}. 
-
-\vspace{2.6mm}
-It was shown that both $M$ and $\mathbb{R}^2$ form a $R$-algebra over $\mathbb{R}$ (see: \url{bit.ly/3eL7LEC}).
-
-  \vspace{0.3em}
-  }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Application: Weierstrass Theorem}{name=approx,column=1,span=1,row=0}{
+  \headerbox{Application: Weierstrass Theorem}{name=approx,column=0,span=1, below=stone}{
 	
-The Stone-Weierstrass theorem is a generalisation of the Weierstrass approximation theorem which states that any continuous functions on 
-a closed interval can be uniformly approximated by a polynomial. This can be deduced straightaway by the Stone-Weierstrass theorem.
+The Weierstrass approximation theorem states 
+\begin{minipage}{0.97\textwidth}
+\centering
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+ Let $f$ be a real continuous function on a closed interval. Then for all $\epsilon > 0$, there exists a polynomial 
+$P_n$ such that 
+$$\sup_{x \in [0, 1]} \left| f(x) - P_n(x) \right| < \epsilon. $$
+    }%
+}
+\end{minipage}\\ 
+This can be deduced straightaway by the Stone-Weierstrass theorem!
 
 \vspace{2mm}
-Consider the Taylor polynomial $P_n(x)$ of $s(x)= \sqrt{1- x}$ for $x \in [-1, 1]$. Using analysis, we can show that $P_n \to s$ uniformly, 
-and thus, $P_n(1-x^2) \to s(1-x^2)= \left| x \right|$ uniformly for $x \in [-1, 1]$. Now, as 
-$$f \vee g = \max \{f, g\} = \frac{1}{2}(f + g + \left| f - g \right|);$$
-$$f \wedge g = \min \{f, g\} = \frac{1}{2}(f + g - \left| f - g \right|),$$
+From the section \textit{$\left|x\right|$ is in the Closure!} we have shown that there exists a sequence of polynomials uniformly converging to $\left| x \right|$ on any compact interval. Now, as 
+$$f \vee g = \frac{1}{2}(f + g + \left| f - g \right|);$$
+$$f \wedge g = \frac{1}{2}(f + g - \left| f - g \right|),$$
 we see that if $\bar{\mathcal{P}}$ is the closure of the set of polynomials under uniform convergence to the limit, $\bar{\mathcal{P}}$ would 
-also be closed under the lattice operations. Thus, as $\bar{\mathcal{P}}$ form an unital subalgebra of all real to real functions, (as its closed under 
-addition and multiplication), and as $\bar{\mathcal{P}}$ separates points trivially, $\bar{\bar{\mathcal{P}}} = \bar{\mathcal{P}} = [-1, 1]^\mathbb{R}$ which can be trivially extended to any closed intervals as required.
-
-\vspace{2mm}
-However, this can also be proved by constructing the approximant directly. By using 
-the weak law of large numbers, we can prove that the Bernstein polynomials can be used 
-to find a sequence of polynomials that uniformly converges on any continuous function.
-(A full proof was typed up and is presented here: \url{bit.ly/2Mz8ug8})
+also be closed under the lattice operations. Thus, as $\bar{\mathcal{P}}$ form an unital subalgebra of all real to real functions, (as it contains 1,closed under addition, multiplication and scalar multiplication), and as $\bar{\mathcal{P}}$ separates points trivially, $\bar{\bar{\mathcal{P}}} = \bar{\mathcal{P}} = [\alpha, \beta]^\mathbb{R}$ for all $\alpha, \beta \in \mathbb{R}, \alpha < \beta$ As required!
   \vspace{0.2em}
   }
 
- \headerbox{Application: Trig. Polynomials}{name=trig,column=1,span=1,below=approx}{
+ \headerbox{Application: Trig. Polynomials}{name=trig,column=1,span=1,below=modulus}{
  
 Another set of functions we might be interested in are the trigonometric polynomials $\mathcal{T}$ 
 where trigonometric polynomials are functions of the form
@@ -322,77 +310,76 @@ $\bar{\bar{\mathcal{T}}} = \bar{\mathcal{T}} = [-\pi, \pi]^\mathbb{R}$
   }
 
  \headerbox{Further Discussion \& Interpolation}{name=inter,column=3,span=1,row=0}{
- While the Stone-Weierstrass theorem proved existence, and the Bernstein polynomials offerd us a method to find a polynomial arbitrarily close to any continuous function with respect to the uniform norm, it is not necessarily the best approximation.
-
-\vspace{2mm}
-Using some simple \textit{Python} scripts, we can easily see that for functions such as $x^2$, the Bernstein 
-polynomials does not offer as much accuracy as just using $x^2$ as its own approximation.
+Let us consider the approximation of $x^2$ using Bernstein polynomials,by calculating explicitly, we find the $n$-th Bernstein approximations of $x^2$ results in the sequence 
+$$B_n(x)=\frac{1}{n} x + \frac{n-1}{n} x^2,$$
+resulting $\sup_{x\in[-1, 1]} \left|x^2 - B_n(x) \right| = 2 / n$; much worse than just using $x^2$ as its own approximation.
 \begin{center}
 \includegraphics[scale = 0.515]{x_squared}
 \end{center}
+
 \vspace{-2mm}
 Consider instead the interpolation theorem:
 
 \textbf{Theorem.} Given $\{(x_0, y_0), \cdots, (x_n, y_n) \} \subseteq \mathbb{R}^2$, using Lagrange polynomials, we can construct polynomial that interpolates the set. \cite{humph}
 
 \vspace{2mm}
-So, if we let $f : [a, b] \to \mathbb{R}$ be a continuous function, we can approximate $f$ using the polynomial that interpolates the set of equidistant points from $a$ to $b$. By implementing this algorithm in Python, we find that for $n = 3$ for $f : [-1, 1] \to \mathbb{R}: x \mapsto x^2$, this method results in a polynomial approximation of $x^2$ (Very Good!). 
+So, if we let $f : [a, b] \to \mathbb{R}$ be a continuous function, we can approximate $f$ using the polynomial that interpolates the set of equidistant points from $a$ to $b$. By implementing this algorithm in Python, we find that for $n = 3$ for $f : [-1, 1] \to \mathbb{R}: x \mapsto x^2$, this method results in a polynomial approximation of $x^2$ (a very good error of zero!). 
 
-\vspace{2mm}
 However, unlike the Bernstein polynomial method, this method does not guarantee that the uniform norm of the difference of the function and its approximation tends to zero as demonstrated by interpolating \textit{Runge's function} (it in fact tends to $+ \infty$). To mitigate this, one can instead use Spline interpolation however this results in an approximant that is a piecewise polynomial instead of just a polynomial.
 
   \vspace{0.2em}
   }  
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Outline and Formalisation}{name=form,column=2,span=1,row=0}{
-
-\textit{The Stone-Weierstrass theorem} was proved and formalised using the 
-\textit{Lean}, the source code of which can be found 
-in my GitHub repository:\\ \url{github.com/JasonKYi/stone-weierstrass}. 
-
-\vspace{2mm}
-The theorem itself relies on two central lemmas:
-
-{\bf Lemma 1.} For all $f \in M$, $f \in \bar{M_0}$ if and only if for all $x, y \in X$, $\epsilon > 0$, there 
+\headerbox{Proof Outline of Stone-Weierstrass}{name=form,column=2,span=1,row=0}{
+{\bf Lemma 1.} For all $f \in M$, $f$ is in $\bar{M_0}$ if and only if for all $x, y \in X$, $\epsilon > 0$, there 
 exists $g \in M_0$ such that $\left| f(x) - g(x) \right| < \epsilon$ and $\left| f(y) - g(y) \right| < \epsilon$.
 
+\textit{Proof.} The forward direction is trivial so we will consider the reverse. Let us fix $x$ and $\epsilon$ and define a mapping $S : X \to \texttt{set} \hspace{1mm} X $,
+$$S(y) := \{z \in X \mid f(z) - g_y(z) < \epsilon \},$$
+where $g_y$ was chosen such that $\left| f(x) - g_y(x) \right| < \epsilon$ and $\left| f(y) - g_y(y) \right| < \epsilon$.
+
+Then for all $y \in X$, $y \in S(y)$ so $\bigcup_{y\in X} S(y) = X$. But as $X$ is compact, $\bigcup_{y\in X} S(y)$ admits a finite subcover; 
+so, there exists a finite index set $I$ such that $\bigcup_{i\in I} S(y_i) = X$. Thus, by letting $p_x = \bigvee_{i \in I} g_{y_i}$, we have constructed 
+a function $p_x \in  \bar{M_0}$ such that 
+$$
+p_x(z) \ge g_{y_i}(z) > f(z) - \epsilon \hspace{1mm} \text{and} \hspace{1mm} p_x(x) < f(x) + \epsilon
+$$
+for all $z \in X$ and $i \in I$	.
+
+Now, by defining a similar mapping to set of $X$, 
+$$T := \{z \in X \mid p_x(z) < f(z) + \epsilon \},$$
+we again create a finite subcover of $X$ and thus can create the required function with $\bigwedge_{j \in J}p_{x_j}$ where $J$ 
+is the index set such that $\bigcup_{j\in J} T(x_j) = X$.
+
+\vspace{2mm}
 {\bf Lemma 2.} Given $S$, a subalgebra of $\mathbb{R}^2$, $S$ must be $\{(0,0)\}$, 
 $\{(x, 0) \mid x \in \mathbb{R} \}$,
 $\{(0. y) \mid y \in \mathbb{R} \}$, 
 $\{(z, z) \mid z \in \mathbb{R} \}$, or
 $\mathbb{R}^2$ itself.
 
-\vspace{2mm}
-\textit{Lemma 1} was formalised and is represented in Lean as 
-$\tt{in\_closure₂\_iff\_dense\_at\_points}$ in $\tt{main.lean}$ by constructing
-constructing mappings from $X$ to set of $X$ while considering the compactness of $X$;
-while \textit{Lemma 2} was also formalised and is represented in Lean as $\tt{subalgebra\_of\_R2}$ and can be found in $\tt{ralgebra.lean}$ which proof involved evoking the law of the excluded middle on different propositions.
-multiple times.
+\textit{Lemma 2} was proved by evoking the law of the excluded middle on different propositions.
 
 \vspace{2mm}
-Now, let $M_0$, $M_1$ be closed subalgebras of $M$ under lattice operations,
-then, by considering lemma 1, it was deduced $\bar{M_0} = \bar{M_1}$ if and only if at for all distinct $x$, $y$, $\bar{M_0}$ and $\bar{M_1}$ have the same boundary points. This was formalised in $\tt{eq\_iff\_boundary\_points\_eq}$ in $\tt{main.lean}$
+Given $x, y \in X$, define the boundary points of $M_0$ to be $\{(f(x), f(y)) \mid f \in M_0 \}$.
+Let $M_0$, $M_1$ be closed subalgebras of $M$ under lattice operations,
+by lemma 1, it is deduced $\bar{M_0} = \bar{M_1}$ iff. for distinct $x$, $y$, $\bar{M_0}$ and $\bar{M_1}$ have the same boundary points.
 
 \vspace{2mm}
-Finally. by showing that the boundary points of $M_0$ form an unital subalgebra of $\mathbb{R}^2$, we see that the boundary points of  $\bar{M_0}$ must be $\mathbb{R^2}$ by lemma 2 and hence, as the boundary points of $M$ is $\mathbb{R}^2$ is $\mathbb{R}^2$, it follows $\bar{M_0} = M$. As required!
+Now, as boundary points of $M_0$ form an unital subalgebra of $\mathbb{R}^2$, the boundary points of  $\bar{M_0}$ must be $\mathbb{R}^2$ by lemma 2 (the first three options excluded as $1 \in M_0$ and the fourth excluded as $M_0$ separate points) hence, as the boundary points of $M$ is $\mathbb{R}^2$ is $\mathbb{R}^2$, it follows $\bar{M_0} = M$ as required!
 
 \vspace{2mm}
-This was formalised in Lean in $\tt{main.lean}$ with the theorem statement being
-
-\vspace{2mm}
-\lstinline{theorem weierstrass_stone \{M₀' : subalgebra ℝ (X → ℝ)\} 
-(hc   : closure₀ M₀'.carrier = M₀'.carrier)
-(hsep : has_seperate_points M₀'.carrier) :
-closure₂ M₀'.carrier = univ}
-
+\textit{The Stone-Weierstrass theorem} was proved and formalised using the 
+\textit{Lean}, the source code of which can be found 
+in my GitHub repository:\\ \url{github.com/JasonKYi/stone-weierstrass/tree/master/srcs}. 
 
 \vspace{0.2em}
   }
 	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{References}{name=references,column=2,span=2,below=form}{
-    \smaller
+  \headerbox{References}{name=references,column=3,span=1,below=inter}{
+    \footnotesize
     \vspace{-0.4em}
     \bibliographystyle{plain}
     \renewcommand{\section}[2]{\vskip 0.05em}
@@ -405,15 +392,10 @@ closure₂ M₀'.carrier = univ}
       \bibitem{gaddy}
         Gaddy, P.
         \newblock The Stone-Weierstrass Theorem and its Applications to $L^2$ Spaces.
-	  \bibitem{lau}
-				Lau, K. and Kudryashov, Y.
-				\newblock (2018) Algebra over Commutative Semiring (under category) [Online].
-				\newblock Available at: \url{bit.ly/3gLIPyS}
-				\newblock (Assessed: 02 June 2020)
 	  \bibitem{humph}
-	  	 Humpherys, J. and Jarvis, T. J.
+	  	 Humpherys, J.
 	  	\newblock (2020) Foundations of Applied Mathematics Volume 2: Algorithms, Approximation, Optimization
-	  	\newblock Society for Industrial and Applied Mathematics, pp. 418
+	  	\newblock Society for Industrial and Applied Mathematics
       \end{thebibliography}
   }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
