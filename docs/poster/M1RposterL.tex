@@ -37,7 +37,7 @@
 \def\lstlanguagefiles{lstlean.tex}
 \lstset{language=lean}
 
-\usepackage[hyphens]{url}
+\usepackage{hyperref}
 
 \DeclareUrlCommand\url{\color{magenta}\def\UrlLeft{http://}\urlstyle{tt}}
 
@@ -191,8 +191,8 @@
   \vspace*{5mm}
   \hspace*{2mm} The Formalisation and Applications of the Stone-Weierstrass Theorem}
   % Authors
-  {\linebreak
-  \hspace*{4.5mm} Kexing Ying
+  {\hspace*{4.5mm} Kexing Ying \\
+   \hspace*{4.5mm} \url{imperial.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2d5eb25d-c698-44f3-a1a1-abd700fe1f51}
   }
   % University logo
   { % The makebox allows the title to flow into the logo
@@ -376,7 +376,7 @@ by lemma 1, it is deduced $\bar{M_0} = \bar{M_1}$ iff. for distinct $x$, $y$, $\
 Now, as boundary points of $M_0$ form an unital subalgebra of $\mathbb{R}^2$, the boundary points of  $\bar{M_0}$ must be $\mathbb{R}^2$ by lemma 2 (the first three options excluded as $1 \in M_0$ and the fourth excluded as $M_0$ \textbf{separate points}) hence, as the boundary points of $M$ is $\mathbb{R}^2$ is $\mathbb{R}^2$, it follows $\bar{M_0} = M$ as required!
 
 \vspace{2mm}
-The theorem was also formalised using the \textit{Lean}:\\ \url{github.com/JasonKYi/stone-weierstrass/tree/master/srcs}. 
+The theorem was also formalised using the \textit{Lean}: \\ \url{github.com/JasonKYi/stone-weierstrass/tree/master/src} 
 
 \vspace{0.2em}
   }
