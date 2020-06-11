@@ -9,7 +9,7 @@ def bernstein_poly(f, n):
 def approx_plot(is_seq = False): 
     import matplotlib.pyplot as plt
 
-    f, n = user_input()
+    f, n, f_str = user_input()
     x_vals = np.linspace(0, 1, 100)
 
     if is_seq == False:
@@ -22,7 +22,7 @@ def approx_plot(is_seq = False):
             label_str = "{}-th Bernstein Approx." .format(i)
             plt.plot(x_vals, approx_y_vals, label = label_str)
 
-    plt.plot(x_vals, f(x_vals), label = "$x^2$")
+    plt.plot(x_vals, f(x_vals), label = f_str)
     plt.legend(loc = "best"); plt.show()
 
 approx_plot(is_seq = True)

@@ -10,14 +10,14 @@ def lagrange_interpolation(x_vals, y_vals):
 def interpolation_plot():
     import matplotlib.pyplot as plt
 
-    f, n = user_input()
-    x_vals = np.linspace(0, 1, n + 1)
+    f, n, f_str = user_input()
+    x_vals = np.linspace(-1, 1, n + 1)
     y_vals = f(x_vals)
     p = Polynomial(lagrange_interpolation(x_vals, y_vals))
 
-    x_vals = np.linspace(0, 1, 100)
+    x_vals = np.linspace(-1, 1, 100)
     plt.plot(x_vals, p(x_vals), label = "Interpolation")
-    plt.plot(x_vals, f(x_vals), label = "$x^2$")
+    plt.plot(x_vals, f(x_vals), label = f_str)
     plt.legend(loc = "best"); plt.show()
 
 interpolation_plot()
